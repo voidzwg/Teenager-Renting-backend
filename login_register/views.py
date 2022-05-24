@@ -1,9 +1,21 @@
 from django.http import JsonResponse
+from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 
 from .models import Users
 
 # Create your views here.
+@csrf_exempt
+def hello(request):
+    return HttpResponse('欢迎来到青年租房管理系统')
+@csrf_exempt
+def detail(request,id):
+    user = Users.objects.get(id=id)
+    if user.sex == 1:
+        sex = '男'
+    else:
+        sex = '女'
+    return HttpResponse(user.name+'\n'+user.email+'\n'+sex)
 @csrf_exempt  # 跨域设置
 def register(request):  # 继承请求类
     if request.method == 'POST':  # 判断请求方式是否为 POST（要求POST方式）

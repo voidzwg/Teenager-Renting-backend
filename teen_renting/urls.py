@@ -20,6 +20,5 @@ import login_register.views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('login/', login_register.views.login),
-    path('register/', login_register.views.register),
+    path('', include('login_register.urls')),
 ]
