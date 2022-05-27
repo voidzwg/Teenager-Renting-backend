@@ -34,6 +34,7 @@ INSTALLED_APPS = [
     'corsheaders',
     'login_register',
     'personal_homepage',
+    'browse_house',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',

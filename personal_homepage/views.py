@@ -11,6 +11,7 @@ import io
 from PIL import Image
 
 # Create your views here.
+@csrf_exempt  # 跨域设置
 def init(request):
     uid = request.POST.get('id')
 
@@ -21,7 +22,7 @@ def init(request):
         temp=Houses.objects.get(id=id)
         house_list.append(temp)
     data = []
-    for i in house_list:
+    for i in house_list[0:5]:
         picture =  b64encode(i.pictures).decode('utf8')
         floor_plan = b64encode(i.floor_plan).decode('utf8')
         p_tmp = {
