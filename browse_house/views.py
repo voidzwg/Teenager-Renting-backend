@@ -20,7 +20,7 @@ def init(request):
             "type": i.type,
             "available": i.available,
             "floor_plan": floor_plan,
-            "picyures": picture,
+            "pictures": picture,
             "detail": i.details
         }
         data.append(p_tmp)

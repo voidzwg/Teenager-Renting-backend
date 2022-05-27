@@ -1,14 +1,7 @@
 from base64 import b64encode
-from typing import List, Any
-
-from django.core import serializers
 from django.http import JsonResponse
-from django.http import HttpResponse
-from django.utils.baseconv import base64
 from django.views.decorators.csrf import csrf_exempt
 from .models import *
-import io
-from PIL import Image
 
 # Create your views here.
 @csrf_exempt  # 跨域设置
@@ -34,7 +27,7 @@ def init(request):
             "type": i.type,
             "available": i.available,
             "floor_plan": floor_plan,
-            "picyures": picture,
+            "pictures": picture,
             "detail": i.details
         }
         data.append(p_tmp)
