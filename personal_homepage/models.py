@@ -88,7 +88,7 @@ class AuthUserUserPermissions(models.Model):
 
 
 class Carts(models.Model):
-    id = models.ForeignKey('Houses', models.DO_NOTHING, db_column='id')
+    hid = models.ForeignKey('Houses', models.DO_NOTHING, db_column='hid')
     uid = models.ForeignKey('Users', models.DO_NOTHING, db_column='uid')
 
     class Meta:
@@ -192,6 +192,7 @@ class Tickets(models.Model):
     status = models.IntegerField()
     comment = models.IntegerField(blank=True, null=True)
     details = models.TextField(blank=True, null=True)
+    pictures = models.TextField(blank=True, null=True)
 
     class Meta:
         managed = False

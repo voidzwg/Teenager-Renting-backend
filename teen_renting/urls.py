@@ -17,8 +17,10 @@ from django.contrib import admin
 from django.urls import path,include
 
 import login_register.views
+import personal_homepage.views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('login_register.urls')),
+    path('login_register/', include('login_register.urls')),
+    path('personal_homepage/', include('personal_homepage.urls')),
 ]

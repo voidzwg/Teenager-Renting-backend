@@ -18,7 +18,7 @@ class Users(models.Model):
     sex = models.IntegerField(blank=True, null=True)
 
     class Meta:
-        managed = True
+        managed = False
         db_table = 'users'
 
 
@@ -31,7 +31,7 @@ class Workers(models.Model):
     description = models.TextField(blank=True, null=True)
 
     class Meta:
-        managed = True
+        managed = False
         db_table = 'workers'
 
 
@@ -41,5 +41,5 @@ class Admins(models.Model):
     password = models.CharField(max_length=18)
 
     class Meta:
-        managed = True
+        managed = False
         db_table = 'admins'
