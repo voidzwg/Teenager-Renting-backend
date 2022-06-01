@@ -177,6 +177,7 @@ class Orders(models.Model):
     order_time = models.DateTimeField()
     duration = models.IntegerField()
     amount = models.FloatField()
+    status = models.IntegerField()
     details = models.TextField(blank=True, null=True)
 
     class Meta:

@@ -1,6 +1,7 @@
 import random
 from base64 import b64encode
 
+from django.core import serializers
 from django.http import JsonResponse
 
 from .models import *
@@ -8,7 +9,7 @@ from .models import *
 def init(request):
     house_list = Houses.objects.all()
     data = []
-    for i in house_list[0:50]:
+    for i in house_list[0:49]:
         picture =  b64encode(i.pictures).decode('utf8')
         floor_plan = b64encode(i.floor_plan).decode('utf8')
         p_tmp = {
