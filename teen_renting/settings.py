@@ -36,6 +36,7 @@ INSTALLED_APPS = [
     'personal_homepage',
     'browse_house',
     'cart',
+    'order',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
