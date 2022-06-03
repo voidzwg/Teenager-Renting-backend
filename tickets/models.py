@@ -62,6 +62,7 @@ class Orders(models.Model):
     paid = models.IntegerField(blank=True, null=True)
     status = models.IntegerField(blank=True, null=True)
     order_time = models.DateTimeField()
+    start_time = models.DateTimeField()
     duration = models.IntegerField()
     amount = models.FloatField()
     details = models.TextField(blank=True, null=True)
