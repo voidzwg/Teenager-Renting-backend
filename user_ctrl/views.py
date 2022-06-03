@@ -90,8 +90,11 @@ def get_workers_info(request):
         worker_list = Workers.objects.filter()
         for worker in worker_list:
             photo_spl = worker.photo.decode("utf-8")
-            str_list = photo_spl.split("'")
-            photo = str_list[1]
+            if photo_spl[0] == 'b' and photo_spl[1] == "'":
+                str_list = photo_spl.split("'")
+                photo = str_list[1]
+            else:
+                photo = photo_spl
             json_data = {
                 "id": worker.id,
                 "username": worker.username,
