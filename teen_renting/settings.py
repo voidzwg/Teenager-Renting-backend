@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'cart',
     'order',
     'user_ctrl',
+    'tickets',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
