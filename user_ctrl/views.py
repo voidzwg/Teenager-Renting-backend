@@ -1,7 +1,6 @@
-from base64 import b64encode
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
-from user_ctrl.funcs import *
+from com.funcs import *
 from .models import Users, Workers
 
 
