@@ -47,6 +47,7 @@ def update_info(request):
         return JsonResponse({'errno': 1001, 'msg': "请求方式错误"})
 
 
+@csrf_exempt
 def get_users_info(request):
     if request.method == 'GET':
         data = []
@@ -67,6 +68,7 @@ def get_users_info(request):
         return JsonResponse({'errno': 1001, 'msg': "请求方式错误"})
 
 
+@csrf_exempt
 def del_user(request):
     if request.method == 'POST':
         id = request.POST.get('userid')
@@ -82,6 +84,7 @@ def del_user(request):
         return JsonResponse({'errno': 1001, 'msg': "请求方式错误"})
 
 
+@csrf_exempt
 def get_workers_info(request):
     if request.method == 'GET':
         data = []
@@ -102,6 +105,7 @@ def get_workers_info(request):
         return JsonResponse({'errno': 1001, 'msg': "请求方式错误"})
 
 
+@csrf_exempt
 def add_worker(request):
     if request.method == 'POST':
         username = request.POST.get('username')
@@ -132,6 +136,7 @@ def add_worker(request):
         return JsonResponse({'errno': 1001, 'msg': "请求方式错误"})
 
 
+@csrf_exempt
 def del_worker(request):
     if request.method == 'POST':
         id = request.POST.get('workerid')
