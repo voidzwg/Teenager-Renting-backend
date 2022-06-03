@@ -57,6 +57,7 @@ def get_users_info(request):
                 "username": user.username,
                 "tel": user.tel,
                 "email": user.email,
+                "name": user.name,
                 "age": user.age,
                 "sex": user.sex
             }
