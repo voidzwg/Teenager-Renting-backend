@@ -40,7 +40,6 @@ INSTALLED_APPS = [
     'homepage',
     'user_ctrl',
     'tickets',
-    'test1',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
