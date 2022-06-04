@@ -1,8 +1,6 @@
-from base64 import b64encode, b64decode
-
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
-from user_ctrl.funcs import *
+from com.funcs import *
 from .models import Users, Workers
 
 
@@ -90,7 +88,7 @@ def get_workers_info(request):
         data = []
         worker_list = Workers.objects.filter()
         for worker in worker_list:
-            photo = b64encode(worker.photo).decode('utf8')
+            photo = set_b64_string(worker.photo.decode("utf-8"))
             json_data = {
                 "id": worker.id,
                 "username": worker.username,
@@ -127,7 +125,9 @@ def add_worker(request):
         else:
             print("In user_ctrl/add_worker: worker is existed")
             return JsonResponse({'errno': 1008, 'msg': "用户已存在"})
-        bytes_photo = b64decode(photo)
+        print(photo)
+        bytes_photo = photo.encode(encoding="utf-8")
+        print(bytes_photo)
         new_worker = Workers(username=username, password=password, name=name,
                              tel=tel, photo=bytes_photo, description=description)
         new_worker.save()
