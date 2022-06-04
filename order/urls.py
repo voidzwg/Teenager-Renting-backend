@@ -7,5 +7,5 @@ urlpatterns = [
     path('get_unpaid',get_unpaid),
     path('pay/',pay),
     path('cancel/',cancel),
-    path('delete/',delete)
+    path('delete/',delete),
 ]

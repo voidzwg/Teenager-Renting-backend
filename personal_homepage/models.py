@@ -10,6 +10,8 @@ from base64 import b64encode
 from django.db import models
 from django.http import JsonResponse
 
+from com.funcs import set_b64_string
+
 
 class Admins(models.Model):
     name = models.CharField(max_length=30, blank=True, null=True)
@@ -21,75 +23,6 @@ class Admins(models.Model):
         db_table = 'admins'
 
 
-class AuthGroup(models.Model):
-    name = models.CharField(unique=True, max_length=150)
-
-    class Meta:
-        managed = False
-        db_table = 'auth_group'
-
-
-class AuthGroupPermissions(models.Model):
-    id = models.BigAutoField(primary_key=True)
-    group = models.ForeignKey(AuthGroup, models.DO_NOTHING)
-    permission = models.ForeignKey('AuthPermission', models.DO_NOTHING)
-
-    class Meta:
-        managed = False
-        db_table = 'auth_group_permissions'
-        unique_together = (('group', 'permission'),)
-
-
-class AuthPermission(models.Model):
-    name = models.CharField(max_length=255)
-    content_type = models.ForeignKey('DjangoContentType', models.DO_NOTHING)
-    codename = models.CharField(max_length=100)
-
-    class Meta:
-        managed = False
-        db_table = 'auth_permission'
-        unique_together = (('content_type', 'codename'),)
-
-
-class AuthUser(models.Model):
-    password = models.CharField(max_length=128)
-    last_login = models.DateTimeField(blank=True, null=True)
-    is_superuser = models.IntegerField()
-    username = models.CharField(unique=True, max_length=150)
-    first_name = models.CharField(max_length=150)
-    last_name = models.CharField(max_length=150)
-    email = models.CharField(max_length=254)
-    is_staff = models.IntegerField()
-    is_active = models.IntegerField()
-    date_joined = models.DateTimeField()
-
-    class Meta:
-        managed = False
-        db_table = 'auth_user'
-
-
-class AuthUserGroups(models.Model):
-    id = models.BigAutoField(primary_key=True)
-    user = models.ForeignKey(AuthUser, models.DO_NOTHING)
-    group = models.ForeignKey(AuthGroup, models.DO_NOTHING)
-
-    class Meta:
-        managed = False
-        db_table = 'auth_user_groups'
-        unique_together = (('user', 'group'),)
-
-
-class AuthUserUserPermissions(models.Model):
-    id = models.BigAutoField(primary_key=True)
-    user = models.ForeignKey(AuthUser, models.DO_NOTHING)
-    permission = models.ForeignKey(AuthPermission, models.DO_NOTHING)
-
-    class Meta:
-        managed = False
-        db_table = 'auth_user_user_permissions'
-        unique_together = (('user', 'permission'),)
-
-
 class Carts(models.Model):
     hid = models.ForeignKey('Houses', models.DO_NOTHING, db_column='hid')
     uid = models.ForeignKey('Users', models.DO_NOTHING, db_column='uid')
@@ -97,64 +30,6 @@ class Carts(models.Model):
     class Meta:
         managed = False
         db_table = 'carts'
-
-
-class Complaints(models.Model):
-    uid = models.ForeignKey('Users', models.DO_NOTHING, db_column='uid')
-    tid = models.ForeignKey('Tickets', models.DO_NOTHING, db_column='tid')
-    contents = models.TextField()
-    pictures = models.TextField(blank=True, null=True)
-    reply = models.TextField(blank=True, null=True)
-
-    class Meta:
-        managed = False
-        db_table = 'complaints'
-
-
-class DjangoAdminLog(models.Model):
-    action_time = models.DateTimeField()
-    object_id = models.TextField(blank=True, null=True)
-    object_repr = models.CharField(max_length=200)
-    action_flag = models.PositiveSmallIntegerField()
-    change_message = models.TextField()
-    content_type = models.ForeignKey('DjangoContentType', models.DO_NOTHING, blank=True, null=True)
-    user = models.ForeignKey(AuthUser, models.DO_NOTHING)
-
-    class Meta:
-        managed = False
-        db_table = 'django_admin_log'
-
-
-class DjangoContentType(models.Model):
-    app_label = models.CharField(max_length=100)
-    model = models.CharField(max_length=100)
-
-    class Meta:
-        managed = False
-        db_table = 'django_content_type'
-        unique_together = (('app_label', 'model'),)
-
-
-class DjangoMigrations(models.Model):
-    id = models.BigAutoField(primary_key=True)
-    app = models.CharField(max_length=255)
-    name = models.CharField(max_length=255)
-    applied = models.DateTimeField()
-
-    class Meta:
-        managed = False
-        db_table = 'django_migrations'
-
-
-class DjangoSession(models.Model):
-    session_key = models.CharField(primary_key=True, max_length=40)
-    session_data = models.TextField()
-    expire_date = models.DateTimeField()
-
-    class Meta:
-        managed = False
-        db_table = 'django_session'
-
 
 class Houses(models.Model):
     short_price = models.FloatField()
@@ -170,26 +45,6 @@ class Houses(models.Model):
     class Meta:
         managed = False
         db_table = 'houses'
-
-def house_serialize(house_list):
-    data = []
-    for i in house_list:
-        picture = b64encode(i.pictures).decode('utf8')
-        floor_plan = b64encode(i.floor_plan).decode('utf8')
-        p_tmp = {
-            "id": i.id,
-            "short_price": i.short_price,
-            "long_price": i.long_price,
-            "area": i.area,
-            "location": i.location,
-            "type": i.type,
-            "available": i.available,
-            "floor_plan": floor_plan,
-            "pictures": picture,
-            "detail": i.details
-        }
-        data.append(p_tmp)
-    return JsonResponse(data,safe = False)
 
 class Orders(models.Model):
     uid = models.ForeignKey('Users', models.DO_NOTHING, db_column='uid')
@@ -235,19 +90,6 @@ class Users(models.Model):
         managed = False
         db_table = 'users'
 
-def user_serialize(user_list):
-    i = user_list
-    picture = b64encode(i.avatar).decode('utf8')
-    data = {
-        'username': i.username,
-        "avatar": picture,
-        'name':i.name,
-        'age':i.age,
-        'sex':i.sex,
-        'email':i.email,
-        'tel':i.tel,
-    }
-    return JsonResponse(data, safe=False)
 
 class Workers(models.Model):
     username = models.CharField(max_length=18)

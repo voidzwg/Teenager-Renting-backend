@@ -6,6 +6,9 @@ import re
 # 电话不合法返回1
 # 邮箱不合法返回2
 # 合法返回0
+from django.http import JsonResponse
+
+
 def check_info(tel, email):
     if tel == "" and email == "":
         return 3
@@ -114,3 +117,101 @@ def set_b64_string(photo_spl):
         photo = photo_spl
     return photo
 
+
+def house_serializes(house_list):
+    data = []
+    for i in house_list:
+        try:
+            picture = i.pictures.decode('utf8')
+            picture = set_b64_string(picture)
+        except:
+            picture = None
+        try:
+            floor_plan = i.floor_plan.decode('utf8')
+            floor_plan = set_b64_string(floor_plan)
+        except:
+            floor_plan = None
+        p_tmp = {
+            "id": i.id,
+            "short_price": i.short_price,
+            "long_price": i.long_price,
+            "area": i.area,
+            "location": i.location,
+            "type": i.type,
+            "available": i.available,
+            "floor_plan": floor_plan,
+            "pictures": picture,
+            "detail": i.details
+        }
+        data.append(p_tmp)
+    return JsonResponse(data,safe = False)
+
+
+def house_serialize(house):
+    i=house
+    try:
+        picture = i.pictures.decode('utf8')
+        picture = set_b64_string(picture)
+    except:
+        picture = None
+    try:
+        floor_plan = i.floor_plan.decode('utf8')
+        floor_plan = set_b64_string(floor_plan)
+    except:
+        floor_plan = None
+    data = {
+        "id": i.id,
+        "short_price": i.short_price,
+        "long_price": i.long_price,
+        "area": i.area,
+        "location": i.location,
+        "type": i.type,
+        "available": i.available,
+        "floor_plan": floor_plan,
+        "pictures": picture,
+        "detail": i.details
+    }
+    return JsonResponse(data,safe = False)
+
+
+def user_serialize(user_list):
+    i = user_list
+    try:
+        picture = i.avatar.decode('utf8')
+        picture = set_b64_string(picture)
+    except:
+        picture = None
+    data = {
+        'username': i.username,
+        "avatar": picture,
+        'name':i.name,
+        'age':i.age,
+        'sex':i.sex,
+        'email':i.email,
+        'tel':i.tel,
+    }
+    return JsonResponse(data, safe=False)
+
+def order_serialize(order_list):
+    data = []
+    for i in order_list:
+        try:
+            picture = i.hid.pictures.decode('utf8')
+            picture = set_b64_string(picture)
+        except:
+            picture =None
+        p_tmp = {
+            'oid': i.id,
+            'hid': i.hid.id,
+            'paid': i.paid,
+            "type": i.type,
+            "pictures": picture,
+            'order_time': i.order_time,
+            'start_time': i.start_time,
+            'duration': i.duration,
+            'amount': i.amount,
+            'status': i.status,
+            'details': i.details
+        }
+        data.append(p_tmp)
+    return JsonResponse(data, safe=False)

@@ -5,10 +5,9 @@
 #   * Make sure each ForeignKey and OneToOneField has `on_delete` set to the desired behavior
 #   * Remove `managed = False` lines if you wish to allow Django to create, modify, and delete the table
 # Feel free to rename the models, but don't rename db_table values or field names.
-from base64 import b64encode
 
 from django.db import models
-from django.http import JsonResponse
+
 
 class Users(models.Model):
     username = models.CharField(max_length=18)
@@ -18,7 +17,7 @@ class Users(models.Model):
     name = models.CharField(max_length=30)
     age = models.IntegerField(blank=True, null=True)
     sex = models.IntegerField(blank=True, null=True)
-
+    avatar= models.TextField(blank=True, null=True)
     class Meta:
         managed = False
         db_table = 'users'
@@ -56,25 +55,3 @@ class Orders(models.Model):
         managed = False
         db_table = 'orders'
 
-def order_serialize(order_list):
-    data = []
-    for i in order_list:
-        try:
-            picture = b64encode(i.hid.pictures).decode('utf8')
-        except:
-            picture =None
-        p_tmp = {
-            'oid': i.id,
-            'hid': i.hid.id,
-            'paid': i.paid,
-            "type": i.type,
-            "pictures": picture,
-            'order_time': i.order_time,
-            'start_time': i.start_time,
-            'duration': i.duration,
-            'amount': i.amount,
-            'status': i.status,
-            'details': i.details
-        }
-        data.append(p_tmp)
-    return JsonResponse(data, safe=False)

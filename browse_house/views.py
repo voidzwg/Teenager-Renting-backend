@@ -1,6 +1,6 @@
 from django.db.models import Q
-
 from .models import *
+from com.funcs import *
 
 
 def get_house(request):
@@ -29,6 +29,7 @@ def get_user(request):
         return user_serialize(user)
     else:
         return JsonResponse({'error':1,'msg':'请求方式错误'})
+
 
 def search(request):
     if request.method == 'GET':

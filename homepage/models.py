@@ -12,6 +12,8 @@ from PIL import Image
 from django.db import models
 from django.http import JsonResponse
 
+from com.funcs import set_b64_string
+
 
 class Admins(models.Model):
     name = models.CharField(max_length=30, blank=True, null=True)
@@ -21,6 +23,7 @@ class Admins(models.Model):
     class Meta:
         managed = False
         db_table = 'admins'
+
 
 class Carts(models.Model):
     hid = models.ForeignKey('Houses', models.DO_NOTHING, db_column='hid')
@@ -57,25 +60,7 @@ class Houses(models.Model):
     class Meta:
         managed = False
         db_table = 'houses'
-def house_serialize(house_list):
-    data = []
-    for i in house_list:
-        picture = b64encode(i.pictures).decode('utf8')
-        floor_plan = b64encode(i.floor_plan).decode('utf8')
-        p_tmp = {
-            "id": i.id,
-            "short_price": i.short_price,
-            "long_price": i.long_price,
-            "area": i.area,
-            "location": i.location,
-            "type": i.type,
-            "available": i.available,
-            "floor_plan": floor_plan,
-            "pictures": picture,
-            "detail": i.details
-        }
-        data.append(p_tmp)
-    return JsonResponse(data,safe = False)
+
 
 class Orders(models.Model):
     uid = models.ForeignKey('Users', models.DO_NOTHING, db_column='uid')
@@ -122,19 +107,6 @@ class Users(models.Model):
         managed = False
         db_table = 'users'
 
-def user_serialize(user_list):
-    i = user_list
-    picture = b64encode(i.avatar).decode('utf8')
-    data = {
-        'username': i.username,
-        "avatar": picture,
-        'name':i.name,
-        'age':i.age,
-        'sex':i.sex,
-        'email':i.email,
-        'tel':i.tel,
-    }
-    return JsonResponse(data, safe=False)
 
 class Workers(models.Model):
     username = models.CharField(max_length=18)

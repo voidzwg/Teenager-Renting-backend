@@ -1,6 +1,6 @@
-from base64 import b64encode
-from django.http import JsonResponse
+
 from .models import *
+from com.funcs import *
 
 
 def init(request):
@@ -85,6 +85,7 @@ def delete(request):
     else:
         return JsonResponse({'error': 1, 'msg': "请求方式错误"})
 
+
 def cancel(request):
     if request.method == 'POST':
         uid = request.POST.get('uid')
@@ -108,3 +109,4 @@ def cancel(request):
             return JsonResponse({'error': 0, 'msg': "取消成功,该房源已解锁"})
     else:
         return JsonResponse({'error': 1, 'msg': "请求方式错误"})
+

@@ -2,7 +2,7 @@ from django.shortcuts import render
 
 # Create your views here.
 from .models import *
-
+from com.funcs import *
 
 def get_user(request):
     if request.method == 'GET':
@@ -21,7 +21,7 @@ def get_user(request):
 def get_house(request):
     if request.method == 'GET':
         houses = Houses.objects.all()
-        return house_serialize(houses)
+        return house_serializes(houses)
     else:
         return JsonResponse({'error': 1, 'msg': '请求方式错误'})
 
