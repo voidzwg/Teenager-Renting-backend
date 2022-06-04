@@ -46,6 +46,7 @@ class Orders(models.Model):
     type = models.IntegerField(blank=True, null=True)
     paid = models.IntegerField(blank=True, null=True)
     order_time = models.DateTimeField()
+    start_time = models.DateTimeField()
     duration = models.IntegerField()
     amount = models.FloatField()
     details = models.TextField(blank=True, null=True)
@@ -58,7 +59,10 @@ class Orders(models.Model):
 def order_serialize(order_list):
     data = []
     for i in order_list:
-        picture = b64encode(i.hid.pictures).decode('utf8')
+        try:
+            picture = b64encode(i.hid.pictures).decode('utf8')
+        except:
+            picture =None
         p_tmp = {
             'oid': i.id,
             'hid': i.hid.id,
@@ -66,6 +70,7 @@ def order_serialize(order_list):
             "type": i.type,
             "pictures": picture,
             'order_time': i.order_time,
+            'start_time': i.start_time,
             'duration': i.duration,
             'amount': i.amount,
             'status': i.status,

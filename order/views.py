@@ -69,9 +69,18 @@ def delete(request):
         if uid is None or oid is None:
             return JsonResponse({'error': 2, 'msg': "参数传入错误"})
         try:
-            Orders.objects.get(uid=uid, id=oid).delete()
+            order = Orders.objects.get(uid=uid, id=oid)
         except:
             return JsonResponse({'error': 3, 'msg': "不存在此订单，可能是参数传入错误"})
+        hid = order.hid
+        status = order.status
+        try:
+            order.delete()
+        except:
+            return JsonResponse({'error': 4, 'msg': "删除失败，原因未知，请看后端报错"})
+        if status != 2:       # 意思是，如果该订单删除前已被取消，则删除时不需要再释放房源
+            hid.available = 1
+            hid.save()
         return JsonResponse({'error': 0, 'msg': "删除成功"})
     else:
         return JsonResponse({'error': 1, 'msg': "请求方式错误"})
@@ -89,8 +98,13 @@ def cancel(request):
         if order.status == 2:
             return JsonResponse({'error': 4, 'msg': "该订单已取消"})
         else:
+            #修改状态
             order.status = 2
             order.save()
-            return JsonResponse({'error': 0, 'msg': "取消成功"})
+            #释放房源
+            hid = order.hid
+            hid.available = 1
+            hid.save()
+            return JsonResponse({'error': 0, 'msg': "取消成功,该房源已解锁"})
     else:
         return JsonResponse({'error': 1, 'msg': "请求方式错误"})

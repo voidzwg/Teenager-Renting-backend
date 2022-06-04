@@ -2,7 +2,7 @@
 **购物车页面**
 
 1. GET url: http://127.0.0.1:8000/cart   parameter: uid
-2. POST url: http://127.0.0.1:8000/cart/submit/  parameters: uid hid type order_time duration amount detail
+2. POST url: http://127.0.0.1:8000/cart/submit/  parameters: uid hid type order_time start_time duration amount detail
 3. POST url: http://127.0.0.1:8000/cart/delete/  parameters: uid hid
 
 
@@ -39,3 +39,7 @@
 
 1. GET url: http://127.0.0.1:8000/browse_house/get_house/  parameters: hid
 2. GET url: http://127.0.0.1:8000/browse_house/get_user/  parameters: uid
+
+**支付页面**
+
+1. POST url: http://127.0.0.1:8000/order/pay/  parameters: uid oid

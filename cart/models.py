@@ -174,10 +174,11 @@ class Orders(models.Model):
     hid = models.ForeignKey(Houses, models.DO_NOTHING, db_column='hid')
     type = models.IntegerField(blank=True, null=True)
     paid = models.IntegerField(blank=True, null=True)
+    status = models.IntegerField(blank=True, null=True)
     order_time = models.DateTimeField()
+    start_time = models.DateTimeField()
     duration = models.IntegerField()
     amount = models.FloatField()
-    status = models.IntegerField()
     details = models.TextField(blank=True, null=True)
 
     class Meta:
@@ -191,9 +192,12 @@ class Tickets(models.Model):
     hid = models.ForeignKey(Houses, models.DO_NOTHING, db_column='hid')
     info = models.TextField(blank=True, null=True)
     status = models.IntegerField()
+    date = models.DateField(blank=True, null=True)
+    materials_pic = models.TextField(blank=True, null=True)
+    materials_text = models.TextField(blank=True, null=True)
     comment = models.IntegerField(blank=True, null=True)
-    details = models.TextField(blank=True, null=True)
     pictures = models.TextField(blank=True, null=True)
+    details = models.TextField(blank=True, null=True)
 
     class Meta:
         managed = False
@@ -203,6 +207,7 @@ class Tickets(models.Model):
 class Users(models.Model):
     username = models.CharField(max_length=18)
     password = models.CharField(max_length=18)
+    avatar = models.TextField(blank=True, null=True)
     tel = models.CharField(max_length=11, blank=True, null=True)
     email = models.CharField(max_length=30, blank=True, null=True)
     name = models.CharField(max_length=30)
