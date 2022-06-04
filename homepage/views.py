@@ -4,7 +4,7 @@ from django.shortcuts import render
 from .models import *
 
 
-def init(request):
+def get_user(request):
     if request.method == 'GET':
         uid = request.GET.get('uid')
         if uid == None:

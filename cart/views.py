@@ -28,6 +28,8 @@ def init(request):
         return JsonResponse(data,safe = False)
     else:
         return JsonResponse({'error':1,'msg':"请求方式错误"})
+
+
 @csrf_exempt  # 跨域设置
 def submit(request):
     if request.method == 'POST':

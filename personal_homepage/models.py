@@ -5,7 +5,10 @@
 #   * Make sure each ForeignKey and OneToOneField has `on_delete` set to the desired behavior
 #   * Remove `managed = False` lines if you wish to allow Django to create, modify, and delete the table
 # Feel free to rename the models, but don't rename db_table values or field names.
+from base64 import b64encode
+
 from django.db import models
+from django.http import JsonResponse
 
 
 class Admins(models.Model):
@@ -168,6 +171,25 @@ class Houses(models.Model):
         managed = False
         db_table = 'houses'
 
+def house_serialize(house_list):
+    data = []
+    for i in house_list:
+        picture = b64encode(i.pictures).decode('utf8')
+        floor_plan = b64encode(i.floor_plan).decode('utf8')
+        p_tmp = {
+            "id": i.id,
+            "short_price": i.short_price,
+            "long_price": i.long_price,
+            "area": i.area,
+            "location": i.location,
+            "type": i.type,
+            "available": i.available,
+            "floor_plan": floor_plan,
+            "pictures": picture,
+            "detail": i.details
+        }
+        data.append(p_tmp)
+    return JsonResponse(data,safe = False)
 
 class Orders(models.Model):
     uid = models.ForeignKey('Users', models.DO_NOTHING, db_column='uid')
@@ -213,6 +235,19 @@ class Users(models.Model):
         managed = False
         db_table = 'users'
 
+def user_serialize(user_list):
+    i = user_list
+    picture = b64encode(i.avatar).decode('utf8')
+    data = {
+        'username': i.username,
+        "avatar": picture,
+        'name':i.name,
+        'age':i.age,
+        'sex':i.sex,
+        'email':i.email,
+        'tel':i.tel,
+    }
+    return JsonResponse(data, safe=False)
 
 class Workers(models.Model):
     username = models.CharField(max_length=18)
