@@ -23,7 +23,10 @@ def get_cart(request):
     if request.method == 'GET':
         uid = request.GET.get('uid')
         cart_list = Carts.objects.filter(uid=uid).select_related('hid')
-        return house_serializes(cart_list)
+        house_list = []
+        for i in cart_list:
+            house_list.append(i)
+        return house_serializes(house_list)
     else:
         return JsonResponse({'error': 1, 'msg': "请求方式错误"})
 
