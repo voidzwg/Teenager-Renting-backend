@@ -1,5 +1,5 @@
 
-from django.views.decorators.csrf import csrf_exempt
+
 from .models import *
 from com.funcs import *
 # Create your views here.
@@ -18,14 +18,13 @@ def get_user(request):
         return JsonResponse({'error':1,'msg':'请求方式错误'})
 
 
-@csrf_exempt  # 跨域设置
 def get_cart(request):
     if request.method == 'GET':
         uid = request.GET.get('uid')
         cart_list = Carts.objects.filter(uid=uid).select_related('hid')
         house_list = []
         for i in cart_list:
-            house_list.append(i)
+            house_list.append(i.hid)
         return house_serializes(house_list)
     else:
         return JsonResponse({'error': 1, 'msg': "请求方式错误"})

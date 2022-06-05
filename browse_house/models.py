@@ -59,7 +59,7 @@ class Users(models.Model):
     name = models.CharField(max_length=30)
     age = models.IntegerField(blank=True, null=True)
     sex = models.IntegerField(blank=True, null=True)
-
+    avatar = models.TextField()
     class Meta:
         managed = False
         db_table = 'users'
