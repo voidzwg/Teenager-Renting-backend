@@ -215,3 +215,49 @@ def order_serialize(order_list):
         }
         data.append(p_tmp)
     return JsonResponse(data, safe=False)
+
+
+def ticket_serialize(tickets_list):
+    data = []
+    for ticket in tickets_list:
+        try:
+            materials_pic = set_b64_string(ticket.materials_pic.decode("utf-8"))
+        except:
+            materials_pic = None
+        try:
+            pictures = set_b64_string(ticket.pictures.decode("utf-8"))
+        except:
+            pictures = None
+        if ticket.wid is None:
+            wid = None
+        else:
+            wid = ticket.wid.id
+        json_data = {
+            "wid": wid,
+            "hid": ticket.hid.id,
+            "info": ticket.info,
+            "status": ticket.status,
+            "date": ticket.date,
+            "materials_pic": materials_pic,
+            "materials_text": ticket.materials_text,
+            "comment": ticket.comment,
+            "pictures": pictures,
+            "details": ticket.details
+        }
+        data.append(json_data)
+    return JsonResponse(data, safe=False)
+
+
+def sort_tickets_by_date():
+    tb = ['-date']
+    return tb
+
+
+def sort_tickets_by_date_and_status():
+    tb = ['status', '-date']
+    return tb
+
+
+def illegal_ticket_submit(order):
+    return False
+
