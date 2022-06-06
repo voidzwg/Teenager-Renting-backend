@@ -248,18 +248,12 @@ def order_serialize(order_list):
 def order_ctrl_serialize(order_list):
     data = []
     for i in order_list:
-        try:
-            picture = i.hid.pictures.decode('utf8')
-            picture = set_b64_string(picture)
-        except:
-            picture =None
         p_tmp = {
             'oid': i.id,
             'uid': i.uid.id,
             'hid': i.hid.id,
             'paid': i.paid,
             "type": i.type,
-            "pictures": picture,
             'order_time': i.order_time,
             'start_time': i.start_time,
             'duration': i.duration,
