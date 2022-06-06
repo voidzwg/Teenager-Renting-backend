@@ -10,7 +10,7 @@ from com.funcs import *
 def get_order_info(request):
     if request.method == 'GET':
         orders_list = Orders.objects.filter()
-        return order_serialize(orders_list)
+        return order_ctrl_serialize(orders_list)
     else:
         return JsonResponse({'errno': 1001, 'msg': "请求方式错误"})
 

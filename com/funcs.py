@@ -174,6 +174,33 @@ def house_serialize(house):
     return JsonResponse(data,safe = False)
 
 
+def house_list_serialize(houses_list):
+    data = []
+    for house in houses_list:
+        try:
+            pictures = set_b64_string(house.pictures.decode('utf-8'))
+        except:
+            pictures = None
+        try:
+            floor_plan = set_b64_string(house.floor_plan.decode('utf-8'))
+        except:
+            floor_plan = None
+        json_data = {
+            "id": house.id,
+            "short_price": house.short_price,
+            "long_price": house.long_price,
+            "area": house.area,
+            "location": house.location,
+            "type": house.type,
+            "available": house.available,
+            "floor_plan": floor_plan,
+            "pictures": pictures,
+            "details": house.details
+        }
+        data.append(json_data)
+    return JsonResponse(data, safe=False)
+
+
 def user_serialize(user_list):
     i = user_list
     try:
@@ -203,6 +230,32 @@ def order_serialize(order_list):
             picture =None
         p_tmp = {
             'oid': i.id,
+            'hid': i.hid.id,
+            'paid': i.paid,
+            "type": i.type,
+            "pictures": picture,
+            'order_time': i.order_time,
+            'start_time': i.start_time,
+            'duration': i.duration,
+            'amount': i.amount,
+            'status': i.status,
+            'details': i.details
+        }
+        data.append(p_tmp)
+    return JsonResponse(data, safe=False)
+
+
+def order_ctrl_serialize(order_list):
+    data = []
+    for i in order_list:
+        try:
+            picture = i.hid.pictures.decode('utf8')
+            picture = set_b64_string(picture)
+        except:
+            picture =None
+        p_tmp = {
+            'oid': i.id,
+            'uid': i.uid.id,
             'hid': i.hid.id,
             'paid': i.paid,
             "type": i.type,
