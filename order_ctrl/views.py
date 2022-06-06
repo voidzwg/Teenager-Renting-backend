@@ -16,18 +16,37 @@ def get_order_info(request):
 
 
 @csrf_exempt
-def check_order(request):
+def approved(request):
     if request.method == 'POST':
         oid = request.POST.get('orderid')
         try:
             order = Orders.objects.get(id=oid)
         except:
-            print("In order_ctrl/check_order: order is not exist")
+            print("In order_ctrl/approved: order is not exist")
             return JsonResponse({'errno': 1002, 'msg': "订单不存在"})
         if order.status == 0:
             order.status = 1
             order.save()
-            return JsonResponse({'errno': 0, 'msg': "审核通过"})
+            return JsonResponse({'errno': 0, 'msg': "审核成功"})
+        else:
+            return JsonResponse({'errno': 1003, 'msg': "订单已审核或取消"})
+    else:
+        return JsonResponse({'errno': 1001, 'msg': "请求方式错误"})
+
+
+@csrf_exempt
+def disapproved(request):
+    if request.method == 'POST':
+        oid = request.POST.get('orderid')
+        try:
+            order = Orders.objects.get(id=oid)
+        except:
+            print("In order_ctrl/disapproved: order is not exist")
+            return JsonResponse({'errno': 1002, 'msg': "订单不存在"})
+        if order.status == 0:
+            order.status = 3
+            order.save()
+            return JsonResponse({'errno': 0, 'msg': "审核成功"})
         else:
             return JsonResponse({'errno': 1003, 'msg': "订单已审核或取消"})
     else:
