@@ -192,6 +192,7 @@ def user_serialize(user_list):
     }
     return JsonResponse(data, safe=False)
 
+
 def order_serialize(order_list):
     data = []
     for i in order_list:
