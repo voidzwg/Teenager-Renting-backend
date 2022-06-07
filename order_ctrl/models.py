@@ -24,22 +24,21 @@ class Houses(models.Model):
         db_table = 'houses'
 
 
-class Tickets(models.Model):
-    wid = models.ForeignKey('Workers', models.DO_NOTHING, db_column='wid', blank=True, null=True)
+class Orders(models.Model):
     uid = models.ForeignKey('Users', models.DO_NOTHING, db_column='uid')
-    hid = models.ForeignKey('Houses', models.DO_NOTHING, db_column='hid')
-    info = models.TextField(blank=True, null=True)
-    status = models.IntegerField()
-    date = models.DateField(blank=True, null=True)
-    materials_pic = models.TextField(blank=True, null=True)
-    materials_text = models.TextField(blank=True, null=True)
-    comment = models.IntegerField(blank=True, null=True)
-    pictures = models.TextField(blank=True, null=True)
+    hid = models.ForeignKey(Houses, models.DO_NOTHING, db_column='hid')
+    type = models.IntegerField(blank=True, null=True)
+    paid = models.IntegerField(blank=True, null=True)
+    status = models.IntegerField(blank=True, null=True)
+    order_time = models.DateTimeField()
+    start_time = models.DateTimeField()
+    duration = models.IntegerField()
+    amount = models.FloatField()
     details = models.TextField(blank=True, null=True)
 
     class Meta:
         managed = False
-        db_table = 'tickets'
+        db_table = 'orders'
 
 
 class Users(models.Model):
@@ -55,16 +54,3 @@ class Users(models.Model):
     class Meta:
         managed = False
         db_table = 'users'
-
-
-class Workers(models.Model):
-    username = models.CharField(max_length=18)
-    password = models.CharField(max_length=18)
-    name = models.CharField(max_length=30)
-    tel = models.CharField(max_length=11, blank=True, null=True)
-    photo = models.TextField(blank=True, null=True)
-    description = models.TextField(blank=True, null=True)
-
-    class Meta:
-        managed = False
-        db_table = 'workers'

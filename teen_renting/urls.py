@@ -25,5 +25,6 @@ urlpatterns = [
     path('order/', include('order.urls')),
     path('homepage/', include('homepage.urls')),
     path('user_ctrl/', include('user_ctrl.urls')),
-    path('tickets/', include('tickets.urls'))
+    path('tickets/', include('tickets.urls')),
+    path('order_ctrl/', include('order_ctrl.urls'))
 ]

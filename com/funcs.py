@@ -174,6 +174,33 @@ def house_serialize(house):
     return JsonResponse(data,safe = False)
 
 
+def house_list_serialize(houses_list):
+    data = []
+    for house in houses_list:
+        try:
+            pictures = set_b64_string(house.pictures.decode('utf-8'))
+        except:
+            pictures = None
+        try:
+            floor_plan = set_b64_string(house.floor_plan.decode('utf-8'))
+        except:
+            floor_plan = None
+        json_data = {
+            "id": house.id,
+            "short_price": house.short_price,
+            "long_price": house.long_price,
+            "area": house.area,
+            "location": house.location,
+            "type": house.type,
+            "available": house.available,
+            "floor_plan": floor_plan,
+            "pictures": pictures,
+            "details": house.details
+        }
+        data.append(json_data)
+    return JsonResponse(data, safe=False)
+
+
 def user_serialize(user_list):
     i = user_list
     try:
@@ -191,6 +218,7 @@ def user_serialize(user_list):
         'tel':i.tel,
     }
     return JsonResponse(data, safe=False)
+
 
 def order_serialize(order_list):
     data = []
@@ -215,3 +243,69 @@ def order_serialize(order_list):
         }
         data.append(p_tmp)
     return JsonResponse(data, safe=False)
+
+
+def order_ctrl_serialize(order_list):
+    data = []
+    for i in order_list:
+        p_tmp = {
+            'oid': i.id,
+            'uid': i.uid.id,
+            'hid': i.hid.id,
+            'paid': i.paid,
+            "type": i.type,
+            'order_time': i.order_time,
+            'start_time': i.start_time,
+            'duration': i.duration,
+            'amount': i.amount,
+            'status': i.status,
+            'details': i.details
+        }
+        data.append(p_tmp)
+    return JsonResponse(data, safe=False)
+
+
+def ticket_serialize(tickets_list):
+    data = []
+    for ticket in tickets_list:
+        try:
+            materials_pic = set_b64_string(ticket.materials_pic.decode("utf-8"))
+        except:
+            materials_pic = None
+        try:
+            pictures = set_b64_string(ticket.pictures.decode("utf-8"))
+        except:
+            pictures = None
+        if ticket.wid is None:
+            wid = None
+        else:
+            wid = ticket.wid.id
+        json_data = {
+            "wid": wid,
+            "hid": ticket.hid.id,
+            "info": ticket.info,
+            "status": ticket.status,
+            "date": ticket.date,
+            "materials_pic": materials_pic,
+            "materials_text": ticket.materials_text,
+            "comment": ticket.comment,
+            "pictures": pictures,
+            "details": ticket.details
+        }
+        data.append(json_data)
+    return JsonResponse(data, safe=False)
+
+
+def sort_tickets_by_date():
+    tb = ['-date']
+    return tb
+
+
+def sort_tickets_by_date_and_status():
+    tb = ['status', '-date']
+    return tb
+
+
+def illegal_ticket_submit(order):
+    return False
+
