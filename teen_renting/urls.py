@@ -30,5 +30,6 @@ urlpatterns = [
     path('house_ctrl/', include('house_ctrl.urls')),
     path('ticket_ctrl/', include('ticket_ctrl.urls')),
     path('contract/', include('contract.urls')),
-    path('worker/', include('worker.urls'))
+    path('worker/', include('worker.urls')),
+    path('complaint/', include('complaint.urls'))
 ]

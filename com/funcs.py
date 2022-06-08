@@ -393,7 +393,16 @@ def sort_tickets_by_date():
     return tb
 
 
-def sort_tickets_by_date_and_status():
+def sort_tickets_by_status_and_date():
     tb = ['status', '-date']
     return tb
+
+
+def sort_complaints_by_reply(complaint1, complaint2):
+    if complaint1.reply and not complaint2.reply:
+        return 1
+    elif not complaint1.reply and complaint2.reply:
+        return -1
+    else:
+        return complaint1.id - complaint2.id
 

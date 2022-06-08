@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'ticket_ctrl',
     'contract',
     'worker',
+    'complaint',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
