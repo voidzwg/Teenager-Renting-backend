@@ -99,6 +99,7 @@ def stop_renting(request):
             house.available = 0
             try:
                 house.pictures = set_b64_string(house.pictures.decode('utf-8')).encode(encoding='utf-8')
+                house.floor_plan = set_b64_string(house.floor_plan.decode('utf-8')).encode(encoding='utf-8')
             except:
                 pass
             house.save()
