@@ -1,5 +1,8 @@
 import re
 from datetime import datetime, timezone, timedelta
+from django.http import JsonResponse
+
+tz = timezone(timedelta(hours=+8))
 
 
 # 检查电话和邮箱格式
@@ -7,9 +10,6 @@ from datetime import datetime, timezone, timedelta
 # 电话不合法返回1
 # 邮箱不合法返回2
 # 合法返回0
-from django.http import JsonResponse
-
-
 def check_info(tel, email):
     if tel == "" and email == "":
         return 3
@@ -145,11 +145,11 @@ def house_serializes(house_list):
             "detail": i.details
         }
         data.append(p_tmp)
-    return JsonResponse(data,safe = False)
+    return JsonResponse(data, safe=False)
 
 
 def house_serialize(house):
-    i=house
+    i = house
     try:
         picture = i.pictures.decode('utf8')
         picture = set_b64_string(picture)
@@ -172,7 +172,7 @@ def house_serialize(house):
         "pictures": picture,
         "detail": i.details
     }
-    return JsonResponse(data,safe = False)
+    return JsonResponse(data, safe=False)
 
 
 def house_list_serialize(houses_list):
@@ -212,11 +212,11 @@ def user_serialize(user_list):
     data = {
         'username': i.username,
         "avatar": picture,
-        'name':i.name,
-        'age':i.age,
-        'sex':i.sex,
-        'email':i.email,
-        'tel':i.tel,
+        'name': i.name,
+        'age': i.age,
+        'sex': i.sex,
+        'email': i.email,
+        'tel': i.tel,
     }
     return JsonResponse(data, safe=False)
 
@@ -228,7 +228,7 @@ def order_serialize(order_list):
             picture = i.hid.pictures.decode('utf8')
             picture = set_b64_string(picture)
         except:
-            picture =None
+            picture = None
         p_tmp = {
             'oid': i.id,
             'hid': i.hid.id,
@@ -248,7 +248,6 @@ def order_serialize(order_list):
 
 def order_ctrl_serialize(order_list):
     data = []
-    tz = timezone(timedelta(hours=+8))
     for i in order_list:
         start_time = i.start_time
         print(start_time.astimezone(tz))
