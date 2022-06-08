@@ -2,7 +2,6 @@ from .views import *
 from django.urls import path
 
 urlpatterns = [
-    # 管理员房源管理页面
     path('get_house_info/', get_house_info, name='get_house_info'),
     path('rent_house/', rent_house, name='rent_house'),
     path('add_house/', add_house, name='add_house'),

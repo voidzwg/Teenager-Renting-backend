@@ -2,7 +2,6 @@ from .views import *
 from django.urls import path
 
 urlpatterns = [
-    # 我的报修页面
     path('get_tickets/', get_tickets, name='get_tickets'),
     path('get_checked_tickets/', get_checked_tickets, name='get_checked_tickets'),
     path('get_finished_tickets/', get_finished_tickets, name='get_finished_tickets'),

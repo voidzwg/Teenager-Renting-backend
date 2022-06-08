@@ -2,7 +2,6 @@ from .views import *
 from django.urls import path
 
 urlpatterns = [
-    # 用户管理页面
     path('update_info/', update_info, name='update_info'),
     path('get_users_info/', get_users_info, name='get_users_info'),
     path('del_user/', del_user, name='del_user'),
