@@ -233,8 +233,8 @@ def order_serialize(order_list):
             'oid': i.id,
             'hid': i.hid.id,
             'paid': i.paid,
-            "type": i.type,
-            "pictures": picture,
+            'type': i.type,
+            'pictures': picture,
             'order_time': i.order_time,
             'start_time': i.start_time,
             'duration': i.duration,
@@ -254,7 +254,7 @@ def order_ctrl_serialize(order_list):
             'uid': i.uid.id,
             'hid': i.hid.id,
             'paid': i.paid,
-            "type": i.type,
+            'type': i.type,
             'order_time': i.order_time.astimezone(tz),
             'start_time': i.start_time.astimezone(tz),
             'duration': i.duration,
@@ -282,6 +282,7 @@ def ticket_serialize(tickets_list):
         else:
             wid = ticket.wid.id
         json_data = {
+            "id": ticket.id,
             "wid": wid,
             "hid": ticket.hid.id,
             "info": ticket.info,
