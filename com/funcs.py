@@ -1,4 +1,8 @@
 import re
+from datetime import datetime, timezone, timedelta
+from django.http import JsonResponse
+
+tz = timezone(timedelta(hours=+8))
 
 
 # 检查电话和邮箱格式
@@ -6,9 +10,6 @@ import re
 # 电话不合法返回1
 # 邮箱不合法返回2
 # 合法返回0
-from django.http import JsonResponse
-
-
 def check_info(tel, email):
     if tel == "" and email == "":
         return 3
@@ -144,11 +145,11 @@ def house_serializes(house_list):
             "detail": i.details
         }
         data.append(p_tmp)
-    return JsonResponse(data,safe = False)
+    return JsonResponse(data, safe=False)
 
 
 def house_serialize(house):
-    i=house
+    i = house
     try:
         picture = i.pictures.decode('utf8')
         picture = set_b64_string(picture)
@@ -171,7 +172,7 @@ def house_serialize(house):
         "pictures": picture,
         "detail": i.details
     }
-    return JsonResponse(data,safe = False)
+    return JsonResponse(data, safe=False)
 
 
 def house_list_serialize(houses_list):
@@ -211,11 +212,11 @@ def user_serialize(user_list):
     data = {
         'username': i.username,
         "avatar": picture,
-        'name':i.name,
-        'age':i.age,
-        'sex':i.sex,
-        'email':i.email,
-        'tel':i.tel,
+        'name': i.name,
+        'age': i.age,
+        'sex': i.sex,
+        'email': i.email,
+        'tel': i.tel,
     }
     return JsonResponse(data, safe=False)
 
@@ -227,13 +228,13 @@ def order_serialize(order_list):
             picture = i.hid.pictures.decode('utf8')
             picture = set_b64_string(picture)
         except:
-            picture =None
+            picture = None
         p_tmp = {
             'oid': i.id,
             'hid': i.hid.id,
             'paid': i.paid,
-            "type": i.type,
-            "pictures": picture,
+            'type': i.type,
+            'pictures': picture,
             'order_time': i.order_time,
             'start_time': i.start_time,
             'duration': i.duration,
@@ -253,9 +254,9 @@ def order_ctrl_serialize(order_list):
             'uid': i.uid.id,
             'hid': i.hid.id,
             'paid': i.paid,
-            "type": i.type,
-            'order_time': i.order_time,
-            'start_time': i.start_time,
+            'type': i.type,
+            'order_time': i.order_time.astimezone(tz),
+            'start_time': i.start_time.astimezone(tz),
             'duration': i.duration,
             'amount': i.amount,
             'status': i.status,
@@ -281,6 +282,7 @@ def ticket_serialize(tickets_list):
         else:
             wid = ticket.wid.id
         json_data = {
+            "id": ticket.id,
             "wid": wid,
             "hid": ticket.hid.id,
             "info": ticket.info,
@@ -348,16 +350,59 @@ def complaint_serialize(complaints_list):
     return JsonResponse(data, safe=False)
 
 
+def contract_serialize(order_list):
+    data = []
+    for order in order_list:
+        house = order.hid
+        user = order.uid
+        p_tmp = {
+            'oid': order.id,
+            'uid': user.id,
+            'name': user.name,
+            'hid': house.id,
+            'location': house.location,
+            'order_time': order.order_time.astimezone(tz),
+            'duration': order.duration,
+            'amount': order.amount
+        }
+        data.append(p_tmp)
+    return JsonResponse(data, safe=False)
+
+
+def worker_serialize(workers_list):
+    data = []
+    for worker in workers_list:
+        try:
+            photo = set_b64_string(worker.photo.decode('utf-8'))
+        except:
+            photo = None
+        p_tmp = {
+            'username': worker.username,
+            'password': worker.password,
+            'name': worker.name,
+            'tel': worker.tel,
+            'photo': photo,
+            'description': worker.description
+        }
+        data.append(p_tmp)
+    return JsonResponse(data, safe=False)
+
+
 def sort_tickets_by_date():
     tb = ['-date']
     return tb
 
 
-def sort_tickets_by_date_and_status():
+def sort_tickets_by_status_and_date():
     tb = ['status', '-date']
     return tb
 
 
-def illegal_ticket_submit(order):
-    return False
+def sort_complaints_by_reply(complaint1, complaint2):
+    if complaint1.reply and not complaint2.reply:
+        return 1
+    elif not complaint1.reply and complaint2.reply:
+        return -1
+    else:
+        return complaint1.id - complaint2.id
 

@@ -4,7 +4,7 @@ from django.views.decorators.csrf import csrf_exempt
 from .models import Users, Houses, Orders
 from com.funcs import *
 from time import time
-from datetime import datetime
+from datetime import datetime, timezone, timedelta
 
 
 # Create your views here.
@@ -33,25 +33,24 @@ def rent_house(request):
             return JsonResponse({'errno': 1002, 'msg': "房子不存在"})
         rent_type = request.POST.get('type')
         duration = request.POST.get('duration')
-        order_time = time()
-        start_time = request.POST.get('start_time')  # 记得传入时间戳
+        tz = timezone(timedelta(hours=+8))
+        order_time = datetime.fromtimestamp(int(time()), tz=tz)
+        start_time = request.POST.get('start_time')
         if not start_time:
             start_time = order_time
-        try:
-            start_time = float(start_time)
-        except:
+        else:
+            start_time = datetime.strptime(start_time, "%Y-%m-%d %H:%M:%S").astimezone(tz)
+        if start_time < order_time:
             return JsonResponse({'errno': 1003, 'msg': "时间错误"})
-        if order_time > start_time:
-            return JsonResponse({'errno': 1003, 'msg': "时间错误"})
-        order_time = datetime.fromtimestamp(order_time)
-        start_time = datetime.fromtimestamp(start_time)
         amount = request.POST.get('amount')
         details = request.POST.get('details')
+        if not details:
+            details = None
         if not amount:
             amount = 0
-        new_order = Orders(uid=user, hid=house, type=int(rent_type), paid=0,
-                           status=0, order_time=order_time, start_time=start_time,
-                           duration=int(duration), amount=amount, details=details)
+        new_order = Orders(uid=user, hid=house, type=int(rent_type), paid=1,
+                           status=1, order_time=order_time, start_time=start_time,
+                           duration=int(duration), amount=float(amount), details=details)
         new_order.save()
         return JsonResponse({'errno': 0, 'msg': "租房成功"})
     return JsonResponse({'errno': 1001, 'msg': "请求方式错误"})

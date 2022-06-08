@@ -9,7 +9,7 @@ def get_tickets(request):
     if request.method == 'POST':
         uid = request.POST.get('uid')
         uid = Users.objects.get(id=uid)
-        tickets_list = Tickets.objects.filter(uid=uid).order_by(*sort_tickets_by_date_and_status())
+        tickets_list = Tickets.objects.filter(uid=uid).order_by(*sort_tickets_by_status_and_date())
         return ticket_serialize(tickets_list)
     else:
         return JsonResponse({'errno': 1001, 'msg': "请求方式错误"})

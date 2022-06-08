@@ -43,6 +43,9 @@ INSTALLED_APPS = [
     'order_ctrl',
     'house_ctrl',
     'ticket_ctrl',
+    'contract',
+    'worker',
+    'complaint',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -94,7 +97,7 @@ DATABASES = {
         'PORT': '3306',  # 数据库连接端口，一般默认为3306
         'NAME': '青年租房管理系统',  # 已经存在的数据库名称
         'USER': 'root',  # 用户名
-        'PASSWORD': 'li.20020909',  # 用户密码
+        'PASSWORD': 'zwg1454101799',  # 用户密码
         'OPTIONS': {
             'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
         }
