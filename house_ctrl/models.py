@@ -8,37 +8,6 @@
 from django.db import models
 
 
-class Admins(models.Model):
-    name = models.CharField(max_length=30, blank=True, null=True)
-    username = models.CharField(max_length=18)
-    password = models.CharField(max_length=18)
-
-    class Meta:
-        managed = False
-        db_table = 'admins'
-
-
-class Carts(models.Model):
-    hid = models.ForeignKey('Houses', models.DO_NOTHING, db_column='hid')
-    uid = models.ForeignKey('Users', models.DO_NOTHING, db_column='uid')
-
-    class Meta:
-        managed = False
-        db_table = 'carts'
-
-
-class Complaints(models.Model):
-    uid = models.ForeignKey('Users', models.DO_NOTHING, db_column='uid')
-    tid = models.ForeignKey('Tickets', models.DO_NOTHING, db_column='tid')
-    contents = models.TextField()
-    pictures = models.TextField(blank=True, null=True)
-    reply = models.TextField(blank=True, null=True)
-
-    class Meta:
-        managed = False
-        db_table = 'complaints'
-
-
 class Houses(models.Model):
     short_price = models.FloatField()
     long_price = models.FloatField()
@@ -72,24 +41,6 @@ class Orders(models.Model):
         db_table = 'orders'
 
 
-class Tickets(models.Model):
-    wid = models.ForeignKey('Workers', models.DO_NOTHING, db_column='wid', blank=True, null=True)
-    uid = models.ForeignKey('Users', models.DO_NOTHING, db_column='uid')
-    hid = models.ForeignKey(Houses, models.DO_NOTHING, db_column='hid')
-    info = models.TextField(blank=True, null=True)
-    status = models.IntegerField()
-    date = models.DateField(blank=True, null=True)
-    materials_pic = models.TextField(blank=True, null=True)
-    materials_text = models.TextField(blank=True, null=True)
-    comment = models.IntegerField(blank=True, null=True)
-    pictures = models.TextField(blank=True, null=True)
-    details = models.TextField(blank=True, null=True)
-
-    class Meta:
-        managed = False
-        db_table = 'tickets'
-
-
 class Users(models.Model):
     username = models.CharField(max_length=18)
     password = models.CharField(max_length=18)
@@ -103,16 +54,3 @@ class Users(models.Model):
     class Meta:
         managed = False
         db_table = 'users'
-
-
-class Workers(models.Model):
-    username = models.CharField(max_length=18)
-    password = models.CharField(max_length=18)
-    name = models.CharField(max_length=30)
-    tel = models.CharField(max_length=11, blank=True, null=True)
-    photo = models.TextField(blank=True, null=True)
-    description = models.TextField(blank=True, null=True)
-
-    class Meta:
-        managed = False
-        db_table = 'workers'
