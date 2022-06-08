@@ -296,6 +296,58 @@ def ticket_serialize(tickets_list):
     return JsonResponse(data, safe=False)
 
 
+def ticket_serialize_full(tickets_list):
+    data = []
+    for ticket in tickets_list:
+        try:
+            materials_pic = set_b64_string(ticket.materials_pic.decode("utf-8"))
+        except:
+            materials_pic = None
+        try:
+            pictures = set_b64_string(ticket.pictures.decode("utf-8"))
+        except:
+            pictures = None
+        if ticket.wid is None:
+            wid = None
+        else:
+            wid = ticket.wid.id
+        json_data = {
+            'id': ticket.id,
+            'uid': ticket.uid.id,
+            "wid": wid,
+            "hid": ticket.hid.id,
+            "info": ticket.info,
+            "status": ticket.status,
+            "date": ticket.date,
+            "materials_pic": materials_pic,
+            "materials_text": ticket.materials_text,
+            "comment": ticket.comment,
+            "pictures": pictures,
+            "details": ticket.details
+        }
+        data.append(json_data)
+    return JsonResponse(data, safe=False)
+
+
+def complaint_serialize(complaints_list):
+    data = []
+    for complaint in complaints_list:
+        try:
+            pictures = set_b64_string(complaint.pictures.decode("utf-8"))
+        except:
+            pictures = None
+        json_data = {
+            'id': complaint.id,
+            'uid': complaint.uid.id,
+            'tid': complaint.tid.id,
+            'contents': complaint.contents,
+            'pictures': pictures,
+            'reply': complaint.reply
+        }
+        data.append(json_data)
+    return JsonResponse(data, safe=False)
+
+
 def sort_tickets_by_date():
     tb = ['-date']
     return tb

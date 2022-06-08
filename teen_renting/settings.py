@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'tickets',
     'order_ctrl',
     'house_ctrl',
+    'ticket_ctrl',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',

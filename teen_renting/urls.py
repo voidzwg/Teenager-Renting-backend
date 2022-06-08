@@ -27,5 +27,6 @@ urlpatterns = [
     path('user_ctrl/', include('user_ctrl.urls')),
     path('tickets/', include('tickets.urls')),
     path('order_ctrl/', include('order_ctrl.urls')),
-    path('house_ctrl/', include('house_ctrl.urls'))
+    path('house_ctrl/', include('house_ctrl.urls')),
+    path('ticket_ctrl/', include('ticket_ctrl.urls'))
 ]
