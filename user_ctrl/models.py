@@ -9,9 +9,9 @@ from django.db import models
 
 
 class Users(models.Model):
-    id = models.IntegerField(primary_key=True)
     username = models.CharField(max_length=18)
     password = models.CharField(max_length=18)
+    avatar = models.TextField(blank=True, null=True)
     tel = models.CharField(max_length=11, blank=True, null=True)
     email = models.CharField(max_length=30, blank=True, null=True)
     name = models.CharField(max_length=30)
@@ -24,14 +24,14 @@ class Users(models.Model):
 
 
 class Workers(models.Model):
-    id = models.IntegerField(primary_key=True)
     username = models.CharField(max_length=18)
     password = models.CharField(max_length=18)
     name = models.CharField(max_length=30)
-    tel = models.CharField(max_length=11)
+    tel = models.CharField(max_length=11, blank=True, null=True)
     photo = models.TextField(blank=True, null=True)
     description = models.TextField(blank=True, null=True)
 
     class Meta:
         managed = False
         db_table = 'workers'
+
