@@ -44,3 +44,31 @@ def search(request):
         return house_serializes(house_list)
     else:
         return JsonResponse({'error': 1, 'msg': '请求方式错误'})
+
+def add_cart(request):
+    if request.method == 'POST':
+        uid = request.POST.get('uid')
+        hid = request.POST.get('hid')
+        if uid is None or hid is None:
+            return JsonResponse({'error': 2, 'msg': 'uid或hid为空'})
+        try:
+            user = Users.objects.get(id=uid)
+        except:
+            return JsonResponse({'error':3,'msg':'无此用户'})
+        try:
+            house = Houses.objects.get(id=hid)
+        except:
+            return JsonResponse({'error': 4, 'msg': '无此房源'})
+        try:
+            cart = Carts.objects.get(uid=user,hid=house)
+        except:
+            None
+        else:
+            return JsonResponse({'error': 5, 'msg': '购物车已存在该房源'})
+        try:
+            Carts.objects.create(uid=user,hid=house)
+        except:
+            return JsonResponse({'error': 6, 'msg': '加入失败，原因未知，请看后端报错'})
+        return JsonResponse({'error': 0, 'msg': '添加成功'})
+    else:
+        return JsonResponse({'error': 1, 'msg': '请求方式错误'})
