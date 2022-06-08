@@ -46,8 +46,8 @@ def rent_house(request):
         if not amount:
             amount = 0
         new_order = Orders(uid=user, hid=house, type=int(rent_type), paid=1,
-                           status=0, order_time=order_time, start_time=start_time,
-                           duration=int(duration), amount=amount, details=details)
+                           status=1, order_time=order_time, start_time=start_time,
+                           duration=int(duration), amount=float(amount), details=details)
         new_order.save()
         return JsonResponse({'errno': 0, 'msg': "租房成功"})
     return JsonResponse({'errno': 1001, 'msg': "请求方式错误"})
