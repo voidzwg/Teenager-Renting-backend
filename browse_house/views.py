@@ -1,7 +1,7 @@
 from django.db.models import Q
 from .models import *
 from com.funcs import *
-
+import re
 
 def get_house(request):
     if request.method == 'GET':
@@ -34,14 +34,36 @@ def get_user(request):
 def search(request):
     if request.method == 'GET':
         keywords = request.GET.get('keywords')
+        if keywords is None or re.match(r"\s*",keywords):
+            keywords = ''
+        type = request.GET.get('type')
+        rent = request.GET.get('rent')
+        if rent is None:
+            rent = 0
+        price = request.GET.getlist('price')
         keywords.strip()
-        import re
-        num = re.findall(r"\d+\.?\d*",keywords)
-        text = re.sub(r"\d+\.?\d*","",keywords)
-        house_list = Houses.objects.filter(location__icontains=text)
-        for i in num:
-            house_list = house_list | Houses.objects.filter(Q(area=i)|Q(long_price=i)|Q(short_price=i))
-        return house_serializes(house_list)
+        text = re.sub(r"\d+\.?\d*", "", keywords)
+        house_list = Houses.objects.filter(location__icontains=text).filter(type=type)
+        list = []
+        if len(price)== 2 :
+            if rent == 1:
+                for i in house_list:
+                    if float(price[0]) <= i.short_price <= float(price[1]):
+                        list.append(i)
+            else:
+                for i in house_list:
+                    if float(price[0]) <= i.long_price <= float(price[1]):
+                        list.append(i)
+        elif len(price) == 1:
+            if rent == 1:
+                for i in house_list:
+                    if i.short_price <= float(price[0]):
+                        list.append(i)
+            else:
+                for i in house_list:
+                    if i.long_price <= float(price[0]):
+                        list.append(i)
+        return house_serializes(list)
     else:
         return JsonResponse({'error': 1, 'msg': '请求方式错误'})
 
