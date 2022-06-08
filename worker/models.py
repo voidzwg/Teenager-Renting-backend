@@ -8,37 +8,6 @@
 from django.db import models
 
 
-class Admins(models.Model):
-    name = models.CharField(max_length=30, blank=True, null=True)
-    username = models.CharField(max_length=18)
-    password = models.CharField(max_length=18)
-
-    class Meta:
-        managed = False
-        db_table = 'admins'
-
-
-class Carts(models.Model):
-    hid = models.ForeignKey('Houses', models.DO_NOTHING, db_column='hid')
-    uid = models.ForeignKey('Users', models.DO_NOTHING, db_column='uid')
-
-    class Meta:
-        managed = False
-        db_table = 'carts'
-
-
-class Complaints(models.Model):
-    uid = models.ForeignKey('Users', models.DO_NOTHING, db_column='uid')
-    tid = models.ForeignKey('Tickets', models.DO_NOTHING, db_column='tid')
-    contents = models.TextField()
-    pictures = models.TextField(blank=True, null=True)
-    reply = models.TextField(blank=True, null=True)
-
-    class Meta:
-        managed = False
-        db_table = 'complaints'
-
-
 class Houses(models.Model):
     short_price = models.FloatField()
     long_price = models.FloatField()
@@ -53,23 +22,6 @@ class Houses(models.Model):
     class Meta:
         managed = False
         db_table = 'houses'
-
-
-class Orders(models.Model):
-    uid = models.ForeignKey('Users', models.DO_NOTHING, db_column='uid')
-    hid = models.ForeignKey(Houses, models.DO_NOTHING, db_column='hid')
-    type = models.IntegerField(blank=True, null=True)
-    paid = models.IntegerField(blank=True, null=True)
-    status = models.IntegerField(blank=True, null=True)
-    order_time = models.DateTimeField()
-    start_time = models.DateTimeField()
-    duration = models.IntegerField()
-    amount = models.FloatField()
-    details = models.TextField(blank=True, null=True)
-
-    class Meta:
-        managed = False
-        db_table = 'orders'
 
 
 class Tickets(models.Model):

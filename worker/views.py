@@ -1,6 +1,6 @@
 from django.views.decorators.csrf import csrf_exempt
 from com.funcs import *
-from .models import Users, Workers, Tickets
+from .models import Workers, Tickets
 
 
 # Create your views here.
