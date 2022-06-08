@@ -357,7 +357,3 @@ def sort_tickets_by_date_and_status():
     tb = ['status', '-date']
     return tb
 
-
-def illegal_ticket_submit(order):
-    return False
-
