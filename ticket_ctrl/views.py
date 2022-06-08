@@ -32,6 +32,12 @@ def create_ticket(request):
             return JsonResponse({'errno': 1002, 'msg': "师傅不存在"})
         ticket.wid = worker
         ticket.date = date
+        if ticket.status == 1:
+            ticket.status = 2
+        elif ticket.status == 2 or ticket.status == 3:
+            return JsonResponse({'errno': 1005, 'msg': "工单正在处理"})
+        else:
+            return JsonResponse({'errno': 1005, 'msg': "工单已处理完毕"})
         try:
             ticket.pictures = set_b64_string(ticket.pictures.decode('utf-8')).encode(encoding='utf-8')
             ticket.materials_pic = set_b64_string(ticket.materials_pic.decode('utf-8')).encode(encoding='utf-8')
