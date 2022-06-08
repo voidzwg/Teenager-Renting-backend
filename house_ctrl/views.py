@@ -97,6 +97,10 @@ def stop_renting(request):
             return JsonResponse({'errno': 1002, 'msg': "房子不存在"})
         if house.available:
             house.available = 0
+            try:
+                house.pictures = set_b64_string(house.pictures.decode('utf-8')).encode(encoding='utf-8')
+            except:
+                pass
             house.save()
         return JsonResponse({'errno': 0, 'msg': "暂停出租成功"})
     return JsonResponse({'errno': 1001, 'msg': "请求方式错误"})
