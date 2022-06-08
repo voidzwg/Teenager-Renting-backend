@@ -45,7 +45,7 @@ def rent_house(request):
         details = request.POST.get('details')
         if not amount:
             amount = 0
-        new_order = Orders(uid=user, hid=house, type=int(rent_type), paid=0,
+        new_order = Orders(uid=user, hid=house, type=int(rent_type), paid=1,
                            status=0, order_time=order_time, start_time=start_time,
                            duration=int(duration), amount=amount, details=details)
         new_order.save()
