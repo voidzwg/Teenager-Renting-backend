@@ -9,7 +9,7 @@ from com.funcs import *
 @csrf_exempt
 def create_contract(request):
     if request.method == 'GET':
-        orders_list = Orders.objects.filter()
+        orders_list = Orders.objects.filter(type=1)
         return contract_serialize(orders_list)
     return JsonResponse({'errno': 1001, 'msg': "请求方式错误"})
 
