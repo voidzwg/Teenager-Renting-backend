@@ -39,6 +39,7 @@
 
 1. GET url: http://127.0.0.1:8000/browse_house/get_house/  parameters: hid
 2. GET url: http://127.0.0.1:8000/browse_house/get_user/  parameters: uid
+3. POST url http://127.0.0.1:8000/browse_house/add_cart/  parameters: uid hid
 
 **支付页面**
 
