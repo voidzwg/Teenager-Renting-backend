@@ -1,4 +1,5 @@
 import re
+from datetime import datetime, timezone, timedelta
 
 
 # 检查电话和邮箱格式
@@ -247,15 +248,18 @@ def order_serialize(order_list):
 
 def order_ctrl_serialize(order_list):
     data = []
+    tz = timezone(timedelta(hours=+8))
     for i in order_list:
+        start_time = i.start_time
+        print(start_time.astimezone(tz))
         p_tmp = {
             'oid': i.id,
             'uid': i.uid.id,
             'hid': i.hid.id,
             'paid': i.paid,
             "type": i.type,
-            'order_time': i.order_time,
-            'start_time': i.start_time,
+            'order_time': i.order_time.astimezone(tz),
+            'start_time': i.start_time.astimezone(tz),
             'duration': i.duration,
             'amount': i.amount,
             'status': i.status,
