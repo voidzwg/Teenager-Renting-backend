@@ -249,8 +249,6 @@ def order_serialize(order_list):
 def order_ctrl_serialize(order_list):
     data = []
     for i in order_list:
-        start_time = i.start_time
-        print(start_time.astimezone(tz))
         p_tmp = {
             'oid': i.id,
             'uid': i.uid.id,
@@ -348,6 +346,25 @@ def complaint_serialize(complaints_list):
             'reply': complaint.reply
         }
         data.append(json_data)
+    return JsonResponse(data, safe=False)
+
+
+def contract_serialize(order_list):
+    data = []
+    for order in order_list:
+        house = order.hid
+        user = order.uid
+        p_tmp = {
+            'oid': order.id,
+            'uid': user.id,
+            'name': user.name,
+            'hid': house.id,
+            "location": house.location,
+            'order_time': order.order_time.astimezone(tz),
+            'duration': order.duration,
+            'amount': order.amount
+        }
+        data.append(p_tmp)
     return JsonResponse(data, safe=False)
 
 
