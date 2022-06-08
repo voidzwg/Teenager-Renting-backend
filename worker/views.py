@@ -11,7 +11,7 @@ def get_worker_info(request):
         print('wid', wid)
         print('type', type(wid))
         try:
-            worker = Workers.objects.get(id=int(wid))
+            worker = Workers.objects.get(id=wid)
         except:
             print("In worker/get_worker_info: no such worker")
             return JsonResponse({'errno': 1002, 'msg': "师傅不存在"})
@@ -24,7 +24,7 @@ def select_tickets(request):
     if request.method == 'POST':
         wid = request.POST.get('workerid')
         try:
-            worker = Workers.objects.get(id=int(wid))
+            worker = Workers.objects.get(id=wid)
         except:
             print("In worker/select_tickets: no such worker")
             return JsonResponse({'errno': 1002, 'msg': "师傅不存在"})
