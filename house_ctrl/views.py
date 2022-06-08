@@ -3,7 +3,7 @@ from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
 from .models import Users, Houses, Orders
 from com.funcs import *
-from time import time
+from time import time, strptime, mktime
 from datetime import datetime
 
 
@@ -33,18 +33,14 @@ def rent_house(request):
             return JsonResponse({'errno': 1002, 'msg': "房子不存在"})
         rent_type = request.POST.get('type')
         duration = request.POST.get('duration')
-        order_time = time()
-        start_time = request.POST.get('start_time')  # 记得传入时间戳
+        order_time = datetime.fromtimestamp(int(time()))
+        start_time = request.POST.get('start_time')
         if not start_time:
             start_time = order_time
-        try:
-            start_time = float(start_time)
-        except:
+        else:
+            start_time = datetime.strptime(start_time, "%Y-%m-%d %H:%M:%S")
+        if start_time < order_time:
             return JsonResponse({'errno': 1003, 'msg': "时间错误"})
-        if order_time > start_time:
-            return JsonResponse({'errno': 1003, 'msg': "时间错误"})
-        order_time = datetime.fromtimestamp(order_time)
-        start_time = datetime.fromtimestamp(start_time)
         amount = request.POST.get('amount')
         details = request.POST.get('details')
         if not amount:
