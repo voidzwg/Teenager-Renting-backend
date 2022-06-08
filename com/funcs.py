@@ -359,10 +359,29 @@ def contract_serialize(order_list):
             'uid': user.id,
             'name': user.name,
             'hid': house.id,
-            "location": house.location,
+            'location': house.location,
             'order_time': order.order_time.astimezone(tz),
             'duration': order.duration,
             'amount': order.amount
+        }
+        data.append(p_tmp)
+    return JsonResponse(data, safe=False)
+
+
+def worker_serialize(workers_list):
+    data = []
+    for worker in workers_list:
+        try:
+            photo = set_b64_string(worker.photo.decode('utf-8'))
+        except:
+            photo = None
+        p_tmp = {
+            'username': worker.username,
+            'password': worker.password,
+            'name': worker.name,
+            'tel': worker.tel,
+            'photo': photo,
+            'description': worker.description
         }
         data.append(p_tmp)
     return JsonResponse(data, safe=False)
