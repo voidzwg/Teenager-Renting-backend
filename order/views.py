@@ -106,3 +106,24 @@ def cancel(request):
     else:
         return JsonResponse({'error': 1, 'msg': "请求方式错误"})
 
+def renew(request):
+    if request.method == 'POST':
+        uid = request.POST.get('uid')
+        oid = request.POST.get('oid')
+        time = request.POST.get('time')
+        if uid is None or oid is None:
+            return JsonResponse({'error': 2, 'msg': "参数传入错误"})
+        try:
+            order = Orders.objects.get(uid=uid, id=oid)
+        except:
+            return JsonResponse({'error': 3, 'msg': "不存在此订单，可能是参数传入错误"})
+        if order.type == 0:
+            return JsonResponse({'error': 4, 'msg': "短租订单不可续约"})
+        try:
+            order.duration += time
+            order.save()
+        except:
+            return JsonResponse({'error': 5, 'msg': "未知错误"})
+        return JsonResponse({'error': 0, 'msg': "续约成功"})
+    else:
+        return JsonResponse({'error': 1, 'msg': "请求方式错误"})

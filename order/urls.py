@@ -8,4 +8,5 @@ urlpatterns = [
     path('pay/',pay),
     path('cancel/',cancel),
     path('delete/',delete),
+    path('renew/',renew)
 ]
