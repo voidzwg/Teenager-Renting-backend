@@ -101,9 +101,6 @@ def cancel(request):
         else:
             #修改状态
             order.status = 2
-            #释放房源
-            order.hid.available = 1
-            order.hid.save()
             order.save()
             return JsonResponse({'error': 0, 'msg': "取消成功,该房源已解锁"})
     else:
