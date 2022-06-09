@@ -119,6 +119,14 @@ def set_b64_string(photo_spl):
     return photo
 
 
+def set_b64_bin(bin_photo):
+    try:
+        photo = set_b64_string(bin_photo.decode('utf-8')).encode(encoding='utf-8')
+    except:
+        photo = None
+    return photo
+
+
 def house_serializes(house_list):
     data = []
     for i in house_list:
