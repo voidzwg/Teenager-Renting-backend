@@ -55,6 +55,9 @@ def del_order(request):
         except:
             print("In order_ctrl/check_order: order is not exist")
             return JsonResponse({'errno': 1002, 'msg': "订单不存在"})
+        if order.hid.available == 0:
+            order.hid.available = 1
+            order.hid.save()
         order.delete()
         return JsonResponse({'errno': 0, 'msg': "删除成功"})
     return JsonResponse({'errno': 1001, 'msg': "请求方式错误"})
