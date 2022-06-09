@@ -5,7 +5,6 @@ from .models import Users, Workers
 
 
 # Create your views here.
-# begin of 用户管理页面
 @csrf_exempt
 def update_info(request):
     if request.method == 'POST':
@@ -33,17 +32,15 @@ def update_info(request):
         except:
             print("In user_ctrl/update_info: no such user")
             return JsonResponse({'errno': 1007, 'msg': "用户不存在"})
-        else:
-            user.email = email
-            user.username = username
-            user.tel = tel
-            user.age = int(age)
-            user.sex = int(sex)
-            user.avatar = set_b64_bin(user.avatar)
-            user.save()
-            return JsonResponse({'errno': 0, 'msg': "修改成功"})
-    else:
-        return JsonResponse({'errno': 1001, 'msg': "请求方式错误"})
+        user.email = email
+        user.username = username
+        user.tel = tel
+        user.age = int(age)
+        user.sex = int(sex)
+        user.avatar = set_b64_bin(user.avatar)
+        user.save()
+        return JsonResponse({'errno': 0, 'msg': "修改成功"})
+    return JsonResponse({'errno': 1001, 'msg': "请求方式错误"})
 
 
 @csrf_exempt
@@ -63,24 +60,21 @@ def get_users_info(request):
             }
             data.append(json_data)
         return JsonResponse(data, safe=False)
-    else:
-        return JsonResponse({'errno': 1001, 'msg': "请求方式错误"})
+    return JsonResponse({'errno': 1001, 'msg': "请求方式错误"})
 
 
 @csrf_exempt
 def del_user(request):
     if request.method == 'POST':
-        id = request.POST.get('userid')
+        uid = request.POST.get('userid')
         try:
-            user = Users.objects.get(id=id)
+            user = Users.objects.get(id=uid)
         except:
             print("In user_ctrl/del_user: no such user")
             return JsonResponse({'errno': 1007, 'msg': "用户不存在"})
-        else:
-            user.delete()
-            return JsonResponse({'errno': 0, 'msg': "删除成功"})
-    else:
-        return JsonResponse({'errno': 1001, 'msg': "请求方式错误"})
+        user.delete()
+        return JsonResponse({'errno': 0, 'msg': "删除成功"})
+    return JsonResponse({'errno': 1001, 'msg': "请求方式错误"})
 
 
 @csrf_exempt
@@ -100,8 +94,7 @@ def get_workers_info(request):
             }
             data.append(json_data)
         return JsonResponse(data, safe=False)
-    else:
-        return JsonResponse({'errno': 1001, 'msg': "请求方式错误"})
+    return JsonResponse({'errno': 1001, 'msg': "请求方式错误"})
 
 
 @csrf_exempt
@@ -126,15 +119,12 @@ def add_worker(request):
         else:
             print("In user_ctrl/add_worker: worker is existed")
             return JsonResponse({'errno': 1008, 'msg': "用户已存在"})
-        print(photo)
         bytes_photo = photo.encode(encoding="utf-8")
-        print(bytes_photo)
         new_worker = Workers(username=username, password=password, name=name,
                              tel=tel, photo=bytes_photo, description=description)
         new_worker.save()
         return JsonResponse({'errno': 0, 'msg': "添加成功"})
-    else:
-        return JsonResponse({'errno': 1001, 'msg': "请求方式错误"})
+    return JsonResponse({'errno': 1001, 'msg': "请求方式错误"})
 
 
 @csrf_exempt
@@ -146,10 +136,7 @@ def del_worker(request):
         except:
             print("In user_ctrl/del_worker: no such worker")
             return JsonResponse({'errno': 1007, 'msg': "用户不存在"})
-        else:
-            worker.delete()
-            return JsonResponse({'errno': 0, 'msg': "删除成功"})
-    else:
-        return JsonResponse({'errno': 1001, 'msg': "请求方式错误"})
-# end of 用户管理页面
+        worker.delete()
+        return JsonResponse({'errno': 0, 'msg': "删除成功"})
+    return JsonResponse({'errno': 1001, 'msg': "请求方式错误"})
 

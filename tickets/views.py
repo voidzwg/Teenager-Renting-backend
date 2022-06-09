@@ -90,18 +90,19 @@ def comment(request):
             return JsonResponse({'errno': 1, 'msg': "没有uid或tid"})
         if score is None:
             return JsonResponse({'errno': 2, 'msg': "没有score"})
-        if not (1<=int(score)<=5):
+        if not (1 <= int(score) <= 5):
             return JsonResponse({'errno': 3, 'msg': "score不合法"})
         try:
-            ticket = Tickets.objects.get(uid=uid,tid=tid)
+            ticket = Tickets.objects.get(id=tid, uid=uid)  # tid 改为 id
         except:
             return JsonResponse({'errno': 4, 'msg': "无此工单"})
         try:
             ticket.comment = score
             ticket.details = details
+            ticket.pictures = set_b64_bin(ticket.pictures)  # 处理图片 by zwg
+            ticket.materials_pic = set_b64_bin(ticket.materials_pic)
             ticket.save()
         except:
             return JsonResponse({'errno': 5, 'msg': "评价失败"})
         return JsonResponse({'errno': 0, 'msg': "评价成功"})
     return JsonResponse({'errno': 1, 'msg': "请求方式错误"})
-

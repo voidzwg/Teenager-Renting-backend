@@ -61,10 +61,7 @@ def submit_materials(request):
             text = None
         ticket.materials_pic = pic
         ticket.materials_text = text
-        try:
-            ticket.pictures = set_b64_string(ticket.pictures.decode('utf-8')).encode(encoding='utf-8')
-        except:
-            pass
+        ticket.pictures = set_b64_bin(ticket.pictures)
         ticket.save()
         return JsonResponse({'errno': 0, 'msg': "提交成功"})
     return JsonResponse({'errno': 1001, 'msg': "请求方式错误"})
