@@ -11,8 +11,7 @@ def get_tickets(request):
         uid = Users.objects.get(id=uid)
         tickets_list = Tickets.objects.filter(uid=uid).order_by(*sort_tickets_by_status_and_date())
         return ticket_serialize(tickets_list)
-    else:
-        return JsonResponse({'errno': 1001, 'msg': "请求方式错误"})
+    return JsonResponse({'errno': 1001, 'msg': "请求方式错误"})
 
 
 @csrf_exempt
@@ -22,8 +21,7 @@ def get_checked_tickets(request):
         uid = Users.objects.get(id=uid)
         tickets_list = Tickets.objects.filter(uid=uid, status=4).order_by(*sort_tickets_by_date())
         return ticket_serialize(tickets_list)
-    else:
-        return JsonResponse({'errno': 1001, 'msg': "请求方式错误"})
+    return JsonResponse({'errno': 1001, 'msg': "请求方式错误"})
 
 
 @csrf_exempt
@@ -33,8 +31,7 @@ def get_finished_tickets(request):
         uid = Users.objects.get(id=uid)
         tickets_list = Tickets.objects.filter(uid=uid, status=3).order_by(*sort_tickets_by_date())
         return ticket_serialize(tickets_list)
-    else:
-        return JsonResponse({'errno': 1001, 'msg': "请求方式错误"})
+    return JsonResponse({'errno': 1001, 'msg': "请求方式错误"})
 
 
 @csrf_exempt
@@ -44,8 +41,7 @@ def get_processing_tickets(request):
         uid = Users.objects.get(id=uid)
         tickets_list = Tickets.objects.filter(uid=uid, status=2).order_by(*sort_tickets_by_date())
         return ticket_serialize(tickets_list)
-    else:
-        return JsonResponse({'errno': 1001, 'msg': "请求方式错误"})
+    return JsonResponse({'errno': 1001, 'msg': "请求方式错误"})
 
 
 @csrf_exempt
@@ -55,8 +51,7 @@ def get_pending_tickets(request):
         uid = Users.objects.get(id=uid)
         tickets_list = Tickets.objects.filter(uid=uid, status=1).order_by(*sort_tickets_by_date())
         return ticket_serialize(tickets_list)
-    else:
-        return JsonResponse({'errno': 1001, 'msg': "请求方式错误"})
+    return JsonResponse({'errno': 1001, 'msg': "请求方式错误"})
 
 
 @csrf_exempt
@@ -66,18 +61,25 @@ def submit_ticket(request):
         hid = request.POST.get('hid')
         info = request.POST.get('info')
         pictures = request.POST.get('pictures')
-        if pictures == "":
-            pictures = None
-        else:
+        if pictures:
             pictures = pictures.encode(encoding='utf-8')
-        uid = Users.objects.get(id=uid)
-        hid = Houses.objects.get(id=hid)
-        new_ticket = Tickets(uid=uid, hid=hid, info=info, pictures=pictures, status=1, comment=5)
+        else:
+            pictures = None
+        try:
+            user = Users.objects.get(id=uid)
+        except:
+            return JsonResponse({'errno': 1005, 'msg': "用户不存在"})
+        try:
+            house = Houses.objects.get(id=hid)
+        except:
+            return JsonResponse({'errno': 1005, 'msg': "房子不存在"})
+        new_ticket = Tickets(uid=user, hid=house, info=info, pictures=pictures, status=1, comment=5)
         new_ticket.save()
         return JsonResponse({'errno': 0, 'msg': "申请成功"})
-    else:
-        return JsonResponse({'errno': 1001, 'msg': "请求方式错误"})
+    return JsonResponse({'errno': 1001, 'msg': "请求方式错误"})
 
+
+@csrf_exempt
 def comment(request):
     if request.method == 'POST':
         uid = request.POST.get('uid')
@@ -88,18 +90,19 @@ def comment(request):
             return JsonResponse({'errno': 1, 'msg': "没有uid或tid"})
         if score is None:
             return JsonResponse({'errno': 2, 'msg': "没有score"})
-        if not (1<=int(score)<=5):
+        if not (1 <= int(score) <= 5):
             return JsonResponse({'errno': 3, 'msg': "score不合法"})
         try:
-            ticket = Tickets.objects.get(uid=uid,tid=tid)
+            ticket = Tickets.objects.get(id=tid, uid=uid)  # tid 改为 id
         except:
             return JsonResponse({'errno': 4, 'msg': "无此工单"})
         try:
             ticket.comment = score
             ticket.details = details
+            ticket.pictures = set_b64_bin(ticket.pictures)  # 处理图片 by zwg
+            ticket.materials_pic = set_b64_bin(ticket.materials_pic)
             ticket.save()
         except:
             return JsonResponse({'errno': 5, 'msg': "评价失败"})
         return JsonResponse({'errno': 0, 'msg': "评价成功"})
-    else:
-        return JsonResponse({'errno': 1, 'msg': "请求方式错误"})
+    return JsonResponse({'errno': 1, 'msg': "请求方式错误"})

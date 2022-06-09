@@ -1,5 +1,3 @@
-from django.shortcuts import render
-from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from .models import Orders
 from com.funcs import *
@@ -11,8 +9,7 @@ def get_order_info(request):
     if request.method == 'GET':
         orders_list = Orders.objects.filter()
         return order_ctrl_serialize(orders_list)
-    else:
-        return JsonResponse({'errno': 1001, 'msg': "请求方式错误"})
+    return JsonResponse({'errno': 1001, 'msg': "请求方式错误"})
 
 
 @csrf_exempt
@@ -28,10 +25,8 @@ def approved(request):
             order.status = 1
             order.save()
             return JsonResponse({'errno': 0, 'msg': "审核成功"})
-        else:
-            return JsonResponse({'errno': 1003, 'msg': "订单已审核或取消"})
-    else:
-        return JsonResponse({'errno': 1001, 'msg': "请求方式错误"})
+        return JsonResponse({'errno': 1003, 'msg': "订单已审核或取消"})
+    return JsonResponse({'errno': 1001, 'msg': "请求方式错误"})
 
 
 @csrf_exempt
@@ -47,10 +42,8 @@ def disapproved(request):
             order.status = 3
             order.save()
             return JsonResponse({'errno': 0, 'msg': "审核成功"})
-        else:
-            return JsonResponse({'errno': 1003, 'msg': "订单已审核或取消"})
-    else:
-        return JsonResponse({'errno': 1001, 'msg': "请求方式错误"})
+        return JsonResponse({'errno': 1003, 'msg': "订单已审核或取消"})
+    return JsonResponse({'errno': 1001, 'msg': "请求方式错误"})
 
 
 @csrf_exempt
@@ -64,6 +57,5 @@ def del_order(request):
             return JsonResponse({'errno': 1002, 'msg': "订单不存在"})
         order.delete()
         return JsonResponse({'errno': 0, 'msg': "删除成功"})
-    else:
-        return JsonResponse({'errno': 1001, 'msg': "请求方式错误"})
+    return JsonResponse({'errno': 1001, 'msg': "请求方式错误"})
 

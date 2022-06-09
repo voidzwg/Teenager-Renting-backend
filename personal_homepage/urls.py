@@ -5,4 +5,5 @@ urlpatterns = [
     path('get_cart/', get_cart),
     path('get_user/', get_user),
     path('get_house/', get_house),
+    path('update_password/', update_password),
 ]

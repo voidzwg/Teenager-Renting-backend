@@ -1,5 +1,3 @@
-from django.shortcuts import render
-from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from .models import Tickets, Workers, Complaints
 from com.funcs import *
@@ -38,11 +36,8 @@ def create_ticket(request):
             return JsonResponse({'errno': 1005, 'msg': "工单正在处理"})
         else:
             return JsonResponse({'errno': 1005, 'msg': "工单已处理完毕"})
-        try:
-            ticket.pictures = set_b64_string(ticket.pictures.decode('utf-8')).encode(encoding='utf-8')
-            ticket.materials_pic = set_b64_string(ticket.materials_pic.decode('utf-8')).encode(encoding='utf-8')
-        except:
-            pass
+        ticket.pictures = set_b64_bin(ticket.pictures)
+        ticket.materials_pic = set_b64_bin(ticket.materials_pic)
         ticket.save()
         return JsonResponse({'errno': 0, 'msg': "生成工单成功"})
     return JsonResponse({'errno': 1001, 'msg': "请求方式错误"})
@@ -65,10 +60,7 @@ def reply_complaint(request):
             return JsonResponse({'errno': 1003, 'msg': "回复不能为空"})
         complaint = Complaints.objects.get(id=cid)
         complaint.reply = reply
-        try:
-            complaint.pictures = set_b64_string(complaint.pictures.decode('utf-8')).encode(encoding='utf-8')
-        except:
-            pass
+        complaint.pictures = set_b64_bin(complaint.pictures)
         complaint.save()
         return JsonResponse({'errno': 0, 'msg': "回复成功"})
     return JsonResponse({'errno': 1001, 'msg': "请求方式错误"})
@@ -85,11 +77,8 @@ def check_ticket(request):
             return JsonResponse({'errno': 1002, 'msg': "工单不存在"})
         if ticket.status == 3:
             ticket.status = 4
-            try:
-                ticket.pictures = set_b64_string(ticket.pictures.decode('utf-8')).encode(encoding='utf-8')
-                ticket.materials_pic = set_b64_string(ticket.materials_pic.decode('utf-8')).encode(encoding='utf-8')
-            except:
-                pass
+            ticket.pictures = set_b64_bin(ticket.pictures)
+            ticket.materials_pic = set_b64_bin(ticket.materials_pic)
             ticket.save()
             return JsonResponse({'errno': 0, 'msg': "审核成功"})
         elif ticket.status == 4:
