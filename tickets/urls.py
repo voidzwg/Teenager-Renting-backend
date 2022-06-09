@@ -7,5 +7,6 @@ urlpatterns = [
     path('get_finished_tickets/', get_finished_tickets, name='get_finished_tickets'),
     path('get_processing_tickets/', get_processing_tickets, name='get_processing_tickets'),
     path('get_pending_tickets/', get_pending_tickets, name='get_pending_tickets'),
-    path('submit_ticket/', submit_ticket, name='submit_ticket')
+    path('submit_ticket/', submit_ticket, name='submit_ticket'),
+    path('comment/', submit_ticket, name='comment')
 ]

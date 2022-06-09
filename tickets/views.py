@@ -1,5 +1,3 @@
-from django.http import JsonResponse
-from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
 from .models import Tickets, Users, Houses
 from com.funcs import *
@@ -79,3 +77,29 @@ def submit_ticket(request):
         return JsonResponse({'errno': 0, 'msg': "申请成功"})
     else:
         return JsonResponse({'errno': 1001, 'msg': "请求方式错误"})
+
+def comment(request):
+    if request.method == 'POST':
+        uid = request.POST.get('uid')
+        tid = request.POST.get('tid')
+        score = request.POST.get('score')
+        details = request.POST.get('details')
+        if uid is None or tid is None:
+            return JsonResponse({'errno': 1, 'msg': "没有uid或tid"})
+        if score is None:
+            return JsonResponse({'errno': 2, 'msg': "没有score"})
+        if not (1<=int(score)<=5):
+            return JsonResponse({'errno': 3, 'msg': "score不合法"})
+        try:
+            ticket = Tickets.objects.get(uid=uid,tid=tid)
+        except:
+            return JsonResponse({'errno': 4, 'msg': "无此工单"})
+        try:
+            ticket.comment = score
+            ticket.details = details
+            ticket.save()
+        except:
+            return JsonResponse({'errno': 5, 'msg': "评价失败"})
+        return JsonResponse({'errno': 0, 'msg': "评价成功"})
+    else:
+        return JsonResponse({'errno': 1, 'msg': "请求方式错误"})
