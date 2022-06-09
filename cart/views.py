@@ -43,16 +43,14 @@ def submit(request):
         paid = 0
         status = 0
         try:
-            Orders.objects.create(
+            order=Orders.objects.create(
                 uid = uid,hid = hid,type =type,order_time=order_time,
                 duration = duration,amount = amount,details = details,
                 paid = paid,status = status,start_time=start_time
             )
         except:
             return JsonResponse({'error':6,'msg':"创建失败，原因未知，请看后端报错"})
-        hid.available = 0
-        hid.save()
-        return JsonResponse({'error':0,'msg':"提交订单成功，该房源已锁定"})
+        return JsonResponse({'error':0,'msg':"提交订单成功，该房源已锁定",'订单id':order.id})
     else:
         return JsonResponse({'error':1,'msg':"请求方式错误"})
 @csrf_exempt  # 跨域设置
