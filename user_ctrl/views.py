@@ -39,6 +39,7 @@ def update_info(request):
             user.tel = tel
             user.age = int(age)
             user.sex = int(sex)
+            user.avatar = set_b64_bin(user.avatar)
             user.save()
             return JsonResponse({'errno': 0, 'msg': "修改成功"})
     else:
