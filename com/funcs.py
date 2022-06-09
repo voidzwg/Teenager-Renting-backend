@@ -37,7 +37,7 @@ def check_tel(tel):
 def check_email(email):
     if email == "":
         return True
-    ex_email = re.compile(r'^[\w]+@[\w.]+[com|net|cn]')
+    ex_email = re.compile(r'^[\w]+@[\w.]+com|net|cn')
     result = ex_email.match(email)
     if result:
         return True
@@ -85,13 +85,25 @@ def check_worker_username(username):
     else:
         return False
 
+# 检查管理员的username
+# '@'加字母数字下划线为合法，返回True
+def check_admin_username(username):
+    ex_username = re.compile(r'^@[\w]+\Z')
+    result = ex_username.match(username)
+    if result:
+        return True
+    else:
+        return False
 
 # 检查password
 # 必须包含字母和数字，否则为非法，返回False
 def check_password(password):
     check_alpha = True
     check_digit = True
+    check_len = True
+    len = 0
     for ch in password:
+        len += 1
         if '0' <= ch <= '9' or 'a' <= ch <= 'z' or 'A' <= ch <= 'Z':
             if '0' <= ch <= '9':
                 check_digit = False
@@ -100,7 +112,9 @@ def check_password(password):
         else:
             check_alpha = check_digit = True
             break
-    if check_alpha or check_digit:
+    if 8 <= len <= 18:
+        check_len = False
+    if check_alpha or check_digit or check_len:
         return False
     return True
 
@@ -405,4 +419,3 @@ def sort_complaints_by_reply(complaint1, complaint2):
         return -1
     else:
         return complaint1.id - complaint2.id
-
