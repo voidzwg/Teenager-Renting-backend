@@ -4,7 +4,6 @@ from django.http import JsonResponse
 
 tz = timezone(timedelta(hours=+8))
 
-
 # 检查电话和邮箱格式
 # 两者均为空字符串返回3
 # 电话不合法返回1
