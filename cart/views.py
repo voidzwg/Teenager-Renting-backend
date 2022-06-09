@@ -50,6 +50,11 @@ def submit(request):
             )
         except:
             return JsonResponse({'error':6,'msg':"创建失败，原因未知，请看后端报错"})
+        try:
+            cart = Carts.objects.get(uid=uid,hid=hid)
+            cart.delete()
+        except:
+            return JsonResponse({'error': 7, 'msg': "订单创建成功，但对应购物车删除失败，可能是不存在对应购物车"})
         return JsonResponse({'error':0,'msg':"提交订单成功，该房源已锁定",'订单id':order.id})
     else:
         return JsonResponse({'error':1,'msg':"请求方式错误"})
