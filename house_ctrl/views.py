@@ -1,5 +1,3 @@
-from django.http import JsonResponse
-from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
 from .models import Users, Houses, Orders
 from com.funcs import *

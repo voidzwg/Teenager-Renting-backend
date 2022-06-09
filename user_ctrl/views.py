@@ -1,4 +1,3 @@
-from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from com.funcs import *
 from .models import Users, Workers

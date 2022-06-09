@@ -1,6 +1,6 @@
 from django.views.decorators.csrf import csrf_exempt
 from com.funcs import *
-from .models import Workers, Tickets, Complaints, Users
+from .models import Tickets, Complaints, Users
 from functools import cmp_to_key
 
 
