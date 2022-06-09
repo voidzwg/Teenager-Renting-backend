@@ -57,6 +57,8 @@ def del_order(request):
             return JsonResponse({'errno': 1002, 'msg': "订单不存在"})
         if order.hid.available == 0:
             order.hid.available = 1
+            order.hid.floor_plan = set_b64_bin(order.hid.floor_plan)
+            order.hid.pictures = set_b64_bin(order.hid.pictures)
             order.hid.save()
         order.delete()
         return JsonResponse({'errno': 0, 'msg': "删除成功"})
