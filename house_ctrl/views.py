@@ -3,7 +3,9 @@ from .models import Users, Houses, Orders
 from com.funcs import *
 from time import time
 from datetime import datetime, timezone, timedelta
+from dateutil.relativedelta import relativedelta  # pip install python-dateutil
 
+tz = timezone(timedelta(hours=+8))
 
 # Create your views here.
 @csrf_exempt
@@ -31,7 +33,6 @@ def rent_house(request):
             return JsonResponse({'errno': 1002, 'msg': "房子不存在"})
         rent_type = request.POST.get('type')
         duration = request.POST.get('duration')
-        tz = timezone(timedelta(hours=+8))
         order_time = datetime.fromtimestamp(int(time()), tz=tz)
         start_time = request.POST.get('start_time')
         if not start_time:
@@ -110,6 +111,17 @@ def del_house(request):
         except:
             print("In house_ctrl/stop_renting: house is not exist")
             return JsonResponse({'errno': 1002, 'msg': "房子不存在"})
+        if house.available == 0:
+            orders = Orders.objects.filter(hid=hid)
+            now_time = datetime.fromtimestamp(int(time()), tz=tz)
+            for order in orders:
+                if order.type == 1:
+                    delta_time = relativedelta(months=order.duration)
+                else:
+                    delta_time = relativedelta(days=order.duration)
+                end_time = order.start_time + delta_time
+                if end_time >= now_time:  # end_time 在 now_time 之后
+                    return JsonResponse({'errno': 1004, 'msg': "房屋出租中，不可删除"})
         house.delete()
         return JsonResponse({'errno': 0, 'msg': "删除房源成功"})
     return JsonResponse({'errno': 1001, 'msg': "请求方式错误"})
