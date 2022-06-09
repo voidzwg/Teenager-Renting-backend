@@ -139,10 +139,10 @@ def send_email(request):
         from_email = EMAIL_FROM  # 发件人，在settings.py中已经配置
         to_email = ['2874820539@qq.com','20373830@buaa.edu.cn']  #邮件接收者列表
         # 发送的消息
-        message = '青年租房网站提醒您：该缴租金啦！,点击进入网站 http://localhost:8000/'  # 发送普通的消息使用的时候message
+        message = '青年租房网站提醒您：该缴租金啦！,点击进入网站 http://localhost:8080/'  # 发送普通的消息使用的时候message
         #meg_html = '<a href="http://localhost:8000/">点击跳转</a>'  # 发送的是一个html消息 需要指定
         send_mail(subject=subject, message=message, from_email=from_email,recipient_list=to_email)
-        return HttpResponse('OK,邮件已经发送成功!')
+        return JsonResponse({'error': 0, 'msg': "OK,邮件已经发送成功!"})
     else:
         return JsonResponse({'error': 1, 'msg': "请求方式错误"})
 
@@ -155,9 +155,9 @@ def send_alone_email(request):
         from_email = EMAIL_FROM  # 发件人，在settings.py中已经配置
         to_email = [email]  # 邮件接收者列表
         # 发送的消息
-        message = '青年租房网站提醒您：该缴租金啦！,点击进入网站 http://localhost:8000/'  # 发送普通的消息使用的时候message
+        message = '青年租房网站提醒您：该缴租金啦！,点击进入网站 http://localhost:8080/'  # 发送普通的消息使用的时候message
         # meg_html = '<a href="http://localhost:8000/">点击跳转</a>'  # 发送的是一个html消息 需要指定
         send_mail(subject=subject, message=message, from_email=from_email, recipient_list=to_email)
-        return HttpResponse('OK,邮件已经发送成功!')
+        return JsonResponse({'error': 0, 'msg': "OK,邮件已经发送成功!"})
     else:
         return JsonResponse({'error': 1, 'msg': "请求方式错误"})
