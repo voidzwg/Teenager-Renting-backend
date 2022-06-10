@@ -1,6 +1,8 @@
 import re
 from datetime import datetime, timezone, timedelta
 from django.http import JsonResponse
+from teen_renting.settings import *
+from django.core.mail import send_mail
 
 tz = timezone(timedelta(hours=+8))
 
@@ -426,3 +428,13 @@ def sort_complaints_by_reply(complaint1, complaint2):
         return -1
     else:
         return complaint1.id - complaint2.id
+
+
+def my_send_email(to_email):
+    subject = '收租提醒'  # 主题
+    from_email = EMAIL_FROM  # 发件人，在settings.py中已经配置
+    # 发送的消息
+    message = '青年租房网站提醒您：该缴租金啦！,点击进入网站 http://localhost:8000/'  # 发送普通的消息使用的时候message
+    # meg_html = '<a href="http://localhost:8000/">点击跳转</a>'  # 发送的是一个html消息 需要指定
+    send_mail(subject=subject, message=message, from_email=from_email, recipient_list=to_email)
+
