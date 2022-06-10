@@ -1,22 +1,25 @@
-from __future__ import absolute_import, unicode_literals    # 保证 celery.py不和library冲突
-import logging
+from __future__ import absolute_import, unicode_literals
 import os
-from celery import Celery
-from celery.schedules import crontab
+from celery import Celery, platforms
+from django.conf import settings
 
-logger = logging.getLogger()
 
-# 指定Django默认配置文件模块
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'teen_renting.settings')
-# 为项目创建一个Celery实例。这里不指定broker容易出现错误。
-app = Celery('teen_renting', broker='redis://127.0.0.1:6379/4', backend='redis://127.0.0.1:6379/5')
-# 这里指定从django的settings.py里读取celery配置
-app.config_from_object('django.conf:settings', namespace='CELERY')
+app = Celery('base_django_api')
 
-# 自动从所有已注册的django app中加载任务
+app.config_from_object('django.conf:settings')
+
 app.autodiscover_tasks()
 
+platforms.C_FORCE_ROOT = True
 
+
+@app.task(bind=True)
+def debug_task(self):
+    print('Request: {0!r}'.format(self.request))
+
+
+'''
 app.conf.update(
     CELERYBEAT_SCHEDULE={
         'auto_update_paid': {
@@ -31,3 +34,4 @@ app.conf.update(
         }
     }
 )
+'''

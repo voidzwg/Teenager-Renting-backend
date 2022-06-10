@@ -57,5 +57,5 @@ def test(x):
 
 @shared_task
 def test_beat(string):
-    print("this is a test", string)
+    print("this is a test", string, datetime.now())
 

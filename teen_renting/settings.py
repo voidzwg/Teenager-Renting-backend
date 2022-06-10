@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 
 from pathlib import Path
+from kombu import Exchange, Queue
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -156,3 +157,39 @@ CORS_ALLOW_CREDENTIALS = True
 CORS_ORIGIN_ALLOW_ALL = True
 # 允许所有的请求头
 CORS_ALLOW_HEADERS = ('*')
+
+# Celery配置
+# 设置任务接受的类型，默认是{'json'}
+CELERY_ACCEPT_CONTENT = ['application/json']
+# 设置task任务序列列化为json
+CELERY_TASK_SERIALIZER = 'json'
+# 请任务接受后存储时的类型
+CELERY_RESULT_SERIALIZER = 'json'
+# 时间格式化为中国时间
+CELERY_TIMEZONE = 'Asia/Shanghai'
+# 是否使用UTC时间
+CELERY_ENABLE_UTC = False
+# 指定borker为redis 如果指定rabbitmq CELERY_BROKER_URL = 'amqp://guest:guest@localhost:5672//'
+CELERY_BROKER_URL = 'redis://127.0.0.1:6379/0'
+# 指定存储结果的地方，支持使用rpc、数据库、redis等等，具体可参考文档 # CELERY_RESULT_BACKEND = 'db+mysql://scott:tiger@localhost/foo' # mysql 作为后端数据库
+CELERY_RESULT_BACKEND = 'redis://127.0.0.1:6379/1'
+# 设置任务过期时间 默认是一天，为None或0 表示永不过期
+CELERY_TASK_RESULT_EXPIRES = 0
+# 设置worker并发数，默认是cpu核心数
+# CELERYD_CONCURRENCY = 12
+# 设置每个worker最大任务数
+CELERYD_MAX_TASKS_PER_CHILD = 100
+# 指定任务的位置
+CELERY_IMPORTS = (
+    'base.tasks',
+)
+# 使用beat启动Celery定时任务
+# schedule时间的具体设定参考：https://docs.celeryproject.org/en/stable/userguide/periodic-tasks.html
+CELERYBEAT_SCHEDULE = {
+    'add-every-10-seconds': {
+        'task': 'order.tasks.test_beat',
+        'schedule': 10,
+        'args': ('hello', )
+    },
+}
+

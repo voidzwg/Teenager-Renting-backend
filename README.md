@@ -44,3 +44,19 @@
 **支付页面**
 
 1. POST url: http://127.0.0.1:8000/order/pay/  parameters: uid oid
+
+**Celery**
+
+启动定时任务beat
+
+```bash
+celery -A dase_django_api beat -l info
+1
+```
+
+启动Celery worker 用来执行定时任务
+
+```bash
+celery -A dase_django_api worker -l -l info 
+```
+

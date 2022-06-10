@@ -10,5 +10,6 @@ urlpatterns = [
     path('delete/',delete),
     path('renew/',renew),
     path('send_email/',send_email),
-    path('send_alone_email/', send_alone_email)
+    path('send_alone_email/', send_alone_email),
+    path('test_celery/', test_celery, name='test_celery')
 ]

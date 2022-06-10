@@ -133,7 +133,7 @@ def renew(request):
 def send_email(request):
     if request.method == 'GET':
         my_send_email(['2874820539@qq.com', '20373830@buaa.edu.cn'])
-        return HttpResponse('OK,邮件已经发送成功!')
+        return JsonResponse({'error': 0, 'msg': "OK,邮件已经发送成功!"})
     else:
         return JsonResponse({'error': 1, 'msg': "请求方式错误"})
 
@@ -144,15 +144,17 @@ def send_alone_email(request):
         user = Users.objects.get(id=uid)
         email = user.email
         my_send_email([email])
-        return HttpResponse('OK,邮件已经发送成功!')
+        return JsonResponse({'error': 0, 'msg': "OK,邮件已经发送成功!"})
     return JsonResponse({'error': 1, 'msg': "请求方式错误"})
 
 
 def test_celery(request):
-    try:
-        result = test(10086)
-        return JsonResponse({'errno': 0, 'msg': "OK"})
-    except Exception as e:
-        print("error:", e)
-        return JsonResponse({'errno': 10086, 'msg': "bad celery"})
+    if request.method == 'POST':
+        num = request.POST.get('num')
+        try:
+            result = test(num)
+            return JsonResponse({'errno': 0, 'msg': result})
+        except Exception as e:
+            print("error:", e)
+            return JsonResponse({'errno': 10086, 'msg': "bad celery"})
 
