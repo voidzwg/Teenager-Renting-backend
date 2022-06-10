@@ -60,24 +60,25 @@ def submit(request):
         return JsonResponse({'error':1,'msg':"请求方式错误"})
 @csrf_exempt  # 跨域设置
 def delete(request):
-    uid = request.POST.get('uid')
-    hid = request.POST.get('hid')
-    if uid is None or hid is None:
-        return JsonResponse({'error': 2, 'msg': "uid或hid为空"})
-    try:
-        uid = Users.objects.get(id=uid)
-    except:
-        return JsonResponse({'error': 3, 'msg': "用户不存在"})
-    try:
-        hid = Houses.objects.get(id=hid)
-    except:
-        return JsonResponse({'error': 4, 'msg': "房源不存在"})
-    try:
-        cart = Carts.objects.get(uid = uid,hid = hid)
-    except:
-        return JsonResponse({'error':1,'msg':"不存在该购物车"})
-    try:
-        cart.delete()
-    except:
-        return JsonResponse({'error':3,'msg':"删除失败，原因未知，请看后端报错"})
-    return JsonResponse({'error':0,'msg':"删除成功"})
+    if request.method == 'POST':
+        uid = request.POST.get('uid')
+        hid = request.POST.get('hid')
+        if uid is None or hid is None:
+            return JsonResponse({'error': 2, 'msg': "uid或hid为空"})
+        try:
+            uid = Users.objects.get(id=uid)
+        except:
+            return JsonResponse({'error': 3, 'msg': "用户不存在"})
+        try:
+            hid = Houses.objects.get(id=hid)
+        except:
+            return JsonResponse({'error': 4, 'msg': "房源不存在"})
+        try:
+            cart = Carts.objects.get(uid = uid,hid = hid)
+        except:
+            return JsonResponse({'error':1,'msg':"不存在该购物车"})
+        try:
+            cart.delete()
+        except:
+            return JsonResponse({'error':3,'msg':"删除失败，原因未知，请看后端报错"})
+        return JsonResponse({'error':0,'msg':"删除成功"})
