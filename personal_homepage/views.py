@@ -64,4 +64,19 @@ def update_password(request):
         return JsonResponse({'error': 1, 'msg': '请求方式错误'})
 
 
+def update_avatar(request):
+    if request.method == 'POST':
+        uid = request.POST.get('uid')
+        avatar = request.POST.get('avatar')
+        if avatar:
+            avatar = avatar.encode(encoding='UTF-8')
+        try:
+            user = Users.objects.get(id=uid)
+        except:
+            return JsonResponse({'error': 2, 'msg': '无此用户'})
+        user.avatar = avatar
+        user.save()
+        return JsonResponse({'error': 0, 'msg': '更新头像成功'})
+    else:
+        return JsonResponse({'error': 1, 'msg': '请求方式错误'})
 
