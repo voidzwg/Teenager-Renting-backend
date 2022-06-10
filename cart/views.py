@@ -65,7 +65,15 @@ def delete(request):
     if uid is None or hid is None:
         return JsonResponse({'error': 2, 'msg': "uid或hid为空"})
     try:
-        cart = Carts.objects.filter(uid = uid,hid = hid)
+        uid = Users.objects.get(id=uid)
+    except:
+        return JsonResponse({'error': 3, 'msg': "用户不存在"})
+    try:
+        hid = Houses.objects.get(id=hid)
+    except:
+        return JsonResponse({'error': 4, 'msg': "房源不存在"})
+    try:
+        cart = Carts.objects.get(uid = uid,hid = hid)
     except:
         return JsonResponse({'error':1,'msg':"不存在该购物车"})
     try:
