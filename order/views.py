@@ -121,7 +121,7 @@ def renew(request):
         if order.type == 0:
             return JsonResponse({'error': 4, 'msg': "短租订单不可续约"})
         try:
-            order.duration += time
+            order.duration += int(time)
             order.save()
         except:
             return JsonResponse({'error': 5, 'msg': "未知错误"})
